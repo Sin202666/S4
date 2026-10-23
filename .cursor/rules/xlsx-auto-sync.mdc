@@ -1,0 +1,38 @@
+---
+description: 改本地化/配置时必须写入本地 xlsx，同轮导表并回读验证，禁止只改 Language
+alwaysApply: true
+---
+
+# 本地 xlsx 自动刷新同步
+
+玩家文案与配置表以 **本地 Excel 为唯一源**。Agent 改完必须让磁盘上的 xlsx 与生成的 luau 一致，不能只改 `Language.luau`。
+
+## 必须（同轮自动做完）
+
+1. **先写 xlsx**（用 Python `openpyxl`，UTF-8 中文）：
+   - 翻译键 → `config/Localization/LocalizationTable.xlsx`
+     - 列 **A=`Category` / B=`Usage`（使用场景，必填） / D=`Key` / E=`zh-cn` / F=`en-us`**
+     - 分类：`01_更新日志` / `02_排行榜` / `03_扳手腕` / `04_系统UI` / `05_配置名` / `06_其他`
+     - **段内排序**：同一 Category 内先按 Usage（使用场景）聚在一起，同一场景内再按 Key 排序。同场景要排在一起；使用场景是配置表时，同一张配置表再排在一起。禁止一律追加到表尾，也禁止只按 Key 把不同场景拆散。
+     - **配置表场景**：这条文案是在登记配置名时，Usage 写成 `配置表·{表名}·{字段}`（表名 = `config/*.xlsx` 文件名去掉扩展名）。例如 `配置表·AWArm·ZhName`、`配置表·ItemData·ZhDes`、`配置表·Setting·ZhName`。禁止笼统写成「配置表 ZhName/ZhDes」。`|` 拆开的选项，Key 等于其中一段时，仍归该表该字段。同一 Key 出现在多张表时，归定义表（`AW*`、`ItemData`、`GamePassItem`、`Setting` 等；通行证名归 `GamePassItem`），不要归只是复用文案的 `ItemShopData`。已经写了具体 UI 场景的（如 `扳手腕·哑铃相关`）留在该场景。不是配置表文案的，不要写成「配置表…」。
+     - **en-us** 用词必须遵守 `localization-terminology`（Cash / Power / Claim 等，禁止同概念多译）
+   - 玩法配置 → 对应 `config/*.xlsx`（如 `AWLevel.xlsx` 的 `ZhName`）
+2. **立刻导表**（不必等用户说、不必等 git 钩子）：
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/ugit/BuildConfig.ps1
+```
+
+3. **回读验证**：从 **xlsx** 解析确认新 Key/行已在表内（不要只看 `Language.luau`）。再按 Studio 同步规则把生成的 `Language.luau` / `ConfigInstance.luau` 写入 Studio。
+4. **回复里列出**本次写入 Excel 的 Key（或配置表行），并提示：若本机 Excel/WPS 正开着该文件，需 **关闭重开** 才能看到 Agent 写入的内容。
+
+## 禁止
+
+- 只改 `Language.luau` / `ConfigInstance.luau` 不改 xlsx
+- 改完 xlsx 不导表就结束本轮
+- 用“已在 Language 里”代替“已写入 LocalizationTable.xlsx”
+
+## 与已有规则关系
+
+- 仍遵守 `no-edit-language-configinstance`：禁止手改生成表；导表产物除外。
+- 物品/关卡中文名在各 `config/AW*.xlsx` 的 `ZhName`；其英文仍须在 `LocalizationTable.xlsx` 有对应 Key 行。

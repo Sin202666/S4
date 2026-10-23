@@ -1,0 +1,35 @@
+local parts = {
+	[[LS1bWwoJTW9kdWxlOiBUaXBzQW5jaG9yCglEZXNjcmlwdGlvbjog6K6p6YCa55So5o+Q56S65Yy6IFRpcHNHdWkuTmV3VGlwc0ZyYW1lIOeahOmhtui+ueWni+e7iOi0tOWcqCBTY3JlZW5HdWlfRnVsbC5Ub3Ag5bqV6L655LiL5pa5CglBdXRob3I6IOeoi+iOmAoJQ3JlYXRlZDogMjAyNi0xMC0xNQoJTGFzdCBNb2RpZmllZDogMjAyNi0xMC0xNgoKCeWKn+iDve+8mgoJLSDnm5HlkKwgVG9wIOeahCBBYnNvbHV0ZVBvc2l0aW9uIC8gQWJzb2x1dGVTaXpl77yIRWRnZVNsaWRlIOa7keWHuua7keWbnuOAgVVJU2NhbGUg6YCC6YWN6YO95Lya6Kem5Y+R77yJ44CBVGlwc0d1aSDlsLrlr7jkuI7moLkgVUlTY2FsZe+8jOWunuaXtuaUueWGmSBOZXdUaXBzRnJhbWUuUG9zaXRpb24g55qEIFkKCS0gVGlwc0d1ae+8iERpc3BsYXlPcmRlciDpq5jkuo7lvLnnqpfjgIFJZ25vcmVHdWlJbnNldO+8ieS4jiBTY3JlZW5HdWlfRnVsbCDkuI3lnKjlkIzkuIDlsYLvvJrkuKTogIUgQWJzb2x1dGVQb3NpdGlvbiDlpITkuo7lkIzkuIDlnZDmoIfns7vvvIzmjInlt67lgLzmjaLnrpflubbpmaTku6UgVGlwc0d1aSDmoLkgVUlTY2FsZQoJLSBUb3Ag5ruR5Ye65bGP5bmV77yI5by556qX5omT5byA77yJ5pe25o+Q56S65Yy65aS55Zyo6KeG5Y+j6aG26L6577yM5LiN6Lef552A5Ye65bGPCgktIOacrOaooeWdl+aYryBOZXdUaXBzRnJhbWUuUG9zaXRpb24g55qE5ZSv5LiA5YaZ5YWl5pa577ybVGlwc1JlbmRlcmVyIOWPquW+gOWuueWZqOmHjOaMguaPkOekuuadoe+8jOS4jeWKqOWuueWZqOS9jee9rgoKCemdmeaAgSBVSe+8iFN0dWRpbyDnu7TmiqTvvIzoioLngrnlkI3kuLrku6PnoIHlpZHnuqbvvInvvJoKCS0gU3RhcnRlckd1aS5UaXBzR3Vp77yIUmVzZXRPblNwYXduPWZhbHNl77yM5ZCr5qC5IFVJU2NhbGXvvIkvIE5ld1RpcHNGcmFtZe+8iEFuY2hvclBvaW50IFk9MO+8iQoJLSBTdGFydGVyR3VpLlNjcmVlbkd1aV9GdWxsLlRvcAoKCeWKoOi9ve+8mgoJCWxvY2FsIFRpcHNBbmNob3IgPSByZXF1aXJlKHNjcmlwdC5UaXBzQW5jaG9yKQoJCVRpcHNBbmNob3IuQmluZCgpICAtLSBBcm1XcmVzdGxlSFVELl9iaW5kSHVkIOWGheiwg+eUqOS4gOasoe+8iOS+nei1liBDb21tb24uQmluZCDlt7LlrozmiJDvvIkKXV0KCmxvY2FsIFV0aWxzID0gcmVxdWlyZShnYW1lLlJlcGxpY2F0ZWRGaXJzdC5BbGxTaWRlQ29kZS5VdGlsc1N5c3RlbSkKbG9jYWwgTG9jYWxQbGF5ZXIgPSBVdGlscy5Mb2NhbFBsYXllcgoKbG9jYWwgQ29tbW9uID0gcmVxdWlyZShzY3JpcHQuUGFyZW50LkNvbW1vbikKCmxvY2FsIFRpcHNBbmNob3IgPSB7fQoKbG9jYWwgVElQU19HVUlfTkFNRSA9ICJUaXBzR3VpIgpsb2NhbCBUSVBTX0ZSQU1FX05BTUUgPSAiTmV3VGlwc0ZyYW1lIgpsb2NhbCBUT1BfR1JPVVBfTkFNRSA9ICJUb3AiCi0tIOaPkOekuuWMuuS4jumhtuagj+S5i+mXtOeahOeVmeeZve+8iOWxj+W5leWDj+e0oO+8iQpsb2NhbCBHQVAgPSA2Cgpsb2NhbCBfdG9wOiBHdWlPYmplY3Q/CmxvY2FsIF90aXBzR3VpOiBTY3JlZW5HdWk/CmxvY2FsIF90aXBzRnJhbWU6IEZyYW1lPwpsb2NhbCBfcm9vdFNjYWxlOiBVSVNjYWxlPwoKLS1bWwoJ5oyJIFRvcCDlvZPliY3lupXovrnph43nrpcgTmV3VGlwc0ZyYW1lIOeahCBZIOWBj+enu++8iFgg5L+d5oyBIFN0dWRpbyDljp/lgLzvvIkKCUByZXR1cm4gbmlsIC0g6IqC54K55pyq57uR5a6a5pe26Z2Z6buYIHJldHVybgpdXQpsb2NhbCBmdW5jdGlvbiBfc3luYygpCglsb2NhbCB0b3AsIHRpcHNHdWksIGZyYW1lID0gX3RvcCwgX3RpcHNHdWksIF90aXBzRnJhbWUKCWlmIG5vdCB0b3Agb3Igbm90IHRpcHNHdWkgb3Igbm90IGZyYW1lIHRoZW4KCQlyZXR1cm4KCWVuZAoJLS0gVG9wIOWcqCBJZ25vcmVHdWlJbnNldCDnmoQgU2NyZWVuR3VpX0Z1bGwg5LiK77yM6KeG5Y+j6aG26L655Y2z5Li6IDDvvIjkuI4gVGlwc0d1aSDlkIzlnZDmoIfns7vvvIkKCWxvY2FsIHRhcmdldFkgPSBtYXRoLm1heCh0b3AuQWJzb2x1dGVQb3NpdGlvbi5ZICsgdG9wLkFic29sdXRlU2l6ZS5ZICsgR0FQLCAwKQoJbG9jYWwgc2NhbGUgPSBpZiBfcm9vdFNjYWxlIGFuZCBfcm9vdFNjYWxlLlNjYWxlID4gMCB0aGVuIF9yb290U2NhbGUuU2NhbGUgZWxzZSAxCglsb2NhbCBwb3MgPSBmcmFtZS5Qb3NpdGlvbgoJZnJhbWUuUG9zaXRpb24gPSBVRGltMi5uZXcocG9zLlguU2NhbGUsIHBvcy5YLk9mZnNldCwgMCwgKHRhcmdldFkgLSB0aXBzR3VpLkFic29sdXRlUG9zaXRpb24uWSkgLyBzY2FsZSkKZW5kCgotLVtbCgnnu5Hlrprmj5DnpLrljLrot5/pmo/pobbmoI/vvIhBcm1XcmVzdGxlSFVELl9iaW5kSHVkIOiwg+S4gOasoe+8iQoJQHJldHVybiBGcmFtZSAtIFRpcHNHdWkuTmV3VGlwc0ZyYW1lCl1dCmZ1bmN0aW9uIFRpcHNBbmNob3IuQmluZCgpOiBGcmFtZQoJbG9jYWwgdGlwc0d1aSA9IENvbW1vbi5HZXQoTG9jYWxQbGF5ZXI6V2FpdEZvckNoaWxkKCJQbGF5ZXJHdWkiKSwgVElQU19HVUlfTkFNRSkgOjogU2NyZWVuR3VpCglsb2NhbCBmcmFtZSA9IENvbW1vbi5HZXQodGlwc0d1aSwgVElQU19GUkFNRV9OQU1FKSA6OiBGcmFtZQoJbG9jYWwgdG9wID0gKENvbW1vbi50b3Agb3IgQ29tbW9uLmh1ZC50b3Agb3IgQ29tbW9uLkdldChDb21tb24uc2NyZWVuR3VpRnVsbCA6OiBTY3JlZW5HdWksIFRPUF9HUk9VUF9OQU1FKSkgOjogR3VpT2JqZWN0CglfdGlwc0d1aSA9IHRpcHNHdWkKCV90aXBzRnJhbWUgPSBmcmFtZQoJX3RvcCA9IHRvcAoJX3Jvb3RTY2FsZSA9IHRpcHNHdWk6RmluZEZpcnN0Q2hpbGRPZkNsYXNzKCJVSVNjYWxlIikKCgl0b3A6R2V0UHJvcGVydHlDaGFuZ2VkU2lnbmFsKCJBYnNvbHV0ZVBvc2l0aW9uIik6Q29ubmVjdChfc3luYykKCXRvcDpHZXRQcm9wZXJ0eUNoYW5nZWRTaWduYWwoIkFic29sdXRlU2l6ZSIpOkNvbm5lY3QoX3N5bmMpCgl0aXBzR3VpOkdldFByb3BlcnR5Q2hhbmdlZFNpZ25hbCgiQWJzb2x1dGVTaXplIik6Q29ubmVjdChfc3luYykKCWlmIF9yb290]],
+	[[U2NhbGUgdGhlbgoJCV9yb290U2NhbGU6R2V0UHJvcGVydHlDaGFuZ2VkU2lnbmFsKCJTY2FsZSIpOkNvbm5lY3QoX3N5bmMpCgllbmQKCV9zeW5jKCkKCXJldHVybiBmcmFtZQplbmQKCnJldHVybiBUaXBzQW5jaG9yCg==]],
+}
+local b64 = table.concat(parts)
+
+local alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+local function decode(data)
+	data = string.gsub(data, "[^" .. alphabet .. "=]", "")
+	local out = table.create(math.floor(#data * 3 / 4))
+	local n = 0
+	for i = 1, #data, 4 do
+		local a = string.find(alphabet, string.sub(data, i, i), 1, true) or 1
+		local b = string.find(alphabet, string.sub(data, i + 1, i + 1), 1, true) or 1
+		local c = string.find(alphabet, string.sub(data, i + 2, i + 2), 1, true) or 65
+		local d = string.find(alphabet, string.sub(data, i + 3, i + 3), 1, true) or 65
+		a, b, c, d = a - 1, b - 1, c - 1, d - 1
+		n += 1
+		out[n] = string.char(bit32.bor(bit32.lshift(a, 2), bit32.rshift(b, 4)))
+		if c < 64 then
+			n += 1
+			out[n] = string.char(bit32.bor(bit32.lshift(bit32.band(b, 15), 4), bit32.rshift(c, 2)))
+		end
+		if d < 64 then
+			n += 1
+			out[n] = string.char(bit32.bor(bit32.lshift(bit32.band(c, 3), 6), d))
+		end
+	end
+	return table.concat(out)
+end
+
+local src = decode(b64)
+local m = game.ReplicatedStorage.ClientSideCode.GuiScripts.ModuleScript.ArmWrestleHUD.TipsAnchor
+m.Source = src
+return { ok = true, name = "TipsAnchor", len = #src, head = string.sub(src, 1, 40), tail = string.sub(src, math.max(1, #src - 40)) }

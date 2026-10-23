@@ -1,0 +1,163 @@
+{
+  "UniverseId": 10771201182,
+  "PlaceId": 137312540946944,
+  "Skipped": [
+    "HolyArm",
+    "JudgementArm",
+    "ArcaneMaterial"
+  ],
+  "SkipReason": "Arm/Material receipts are not granted by SystemBuyRoblox.CreateGrantSnapshot",
+  "Items": [
+    {
+      "Key": "AutoClicker",
+      "Type": "GamePass",
+      "Name": "Auto Clicker",
+      "Price": 99,
+      "Id": 2038076866,
+      "Status": "created",
+      "IconAssetId": 117725625493234,
+      "ZhLocalized": false,
+      "ZhError": "HTTP 403: {\"errors\":[{\"code\":0,\"message\":\"Scope not authorized.\"}]}\n"
+    },
+    {
+      "Key": "DoubleStrength",
+      "Type": "GamePass",
+      "Name": "2x Power",
+      "Price": 149,
+      "Id": 2037770817,
+      "Status": "created",
+      "IconAssetId": 95226835572074,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "DoubleCash",
+      "Type": "GamePass",
+      "Name": "2x Cash",
+      "Price": 129,
+      "Id": 2036546863,
+      "Status": "created",
+      "IconAssetId": 90920098369084,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthTier1",
+      "Type": "DeveloperProduct",
+      "Name": "x2 Power",
+      "Price": 19,
+      "Id": 3718923863,
+      "Status": "created",
+      "IconAssetId": 113553022199913,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthTier2",
+      "Type": "DeveloperProduct",
+      "Name": "x4 Power",
+      "Price": 49,
+      "Id": 3718923869,
+      "Status": "created",
+      "IconAssetId": 80260908114138,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthTier3",
+      "Type": "DeveloperProduct",
+      "Name": "x8 Power",
+      "Price": 99,
+      "Id": 3718923875,
+      "Status": "created",
+      "IconAssetId": 110574680016986,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthTier4",
+      "Type": "DeveloperProduct",
+      "Name": "x16 Power",
+      "Price": 199,
+      "Id": 3718923881,
+      "Status": "created",
+      "IconAssetId": 101071234386894,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthTier5",
+      "Type": "DeveloperProduct",
+      "Name": "x32 Power",
+      "Price": 399,
+      "Id": 3718923891,
+      "Status": "created",
+      "IconAssetId": 90227082674393,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthTier6",
+      "Type": "DeveloperProduct",
+      "Name": "x64 Power",
+      "Price": 799,
+      "Id": 3718923897,
+      "Status": "created",
+      "IconAssetId": 114557621540922,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthPack1",
+      "Type": "DeveloperProduct",
+      "Name": "Power Pack 200",
+      "Price": 19,
+      "Id": 3718923901,
+      "Status": "created",
+      "IconAssetId": 77141836408365,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthPack2",
+      "Type": "DeveloperProduct",
+      "Name": "Power Pack 2000",
+      "Price": 99,
+      "Id": 3718923908,
+      "Status": "created",
+      "IconAssetId": 103320080078506,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthPack3",
+      "Type": "DeveloperProduct",
+      "Name": "Power Pack 20000",
+      "Price": 299,
+      "Id": 3718923917,
+      "Status": "created",
+      "IconAssetId": 120712029845209,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "StrengthPotion",
+      "Type": "DeveloperProduct",
+      "Name": "Power Potion",
+      "Price": 49,
+      "Id": 3718923922,
+      "Status": "created",
+      "IconAssetId": 91871868666226,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "TrainSpeedPotion",
+      "Type": "DeveloperProduct",
+      "Name": "Train Speed Potion",
+      "Price": 49,
+      "Id": 3718923927,
+      "Status": "created",
+      "IconAssetId": 136493207384283,
+      "ZhLocalized": false
+    },
+    {
+      "Key": "CashPotion",
+      "Type": "DeveloperProduct",
+      "Name": "Cash Potion",
+      "Price": 49,
+      "Id": 3718923937,
+      "Status": "created",
+      "IconAssetId": 130463637558369,
+      "ZhLocalized": false
+    }
+  ]
+}

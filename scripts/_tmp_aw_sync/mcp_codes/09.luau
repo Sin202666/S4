@@ -1,0 +1,31 @@
+local alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+local lookup = {}
+for i = 1, #alphabet do
+	lookup[string.byte(alphabet, i)] = i - 1
+end
+local function b64decode(data: string): string
+	data = string.gsub(data, "[^A-Za-z0-9+/=]", "")
+	local out = table.create(math.ceil(#data * 3 / 4))
+	local n = 0
+	for i = 1, #data, 4 do
+		local a = lookup[string.byte(data, i)] or 0
+		local b = lookup[string.byte(data, i + 1)] or 0
+		local c = lookup[string.byte(data, i + 2)] or 0
+		local d = lookup[string.byte(data, i + 3)] or 0
+		n += 1
+		out[n] = string.char(bit32.bor(bit32.lshift(a, 2), bit32.rshift(b, 4)))
+		if string.sub(data, i + 2, i + 2) ~= "=" then
+			n += 1
+			out[n] = string.char(bit32.band(bit32.bor(bit32.lshift(b, 4), bit32.rshift(c, 2)), 255))
+		end
+		if string.sub(data, i + 3, i + 3) ~= "=" then
+			n += 1
+			out[n] = string.char(bit32.band(bit32.bor(bit32.lshift(c, 6), d), 255))
+		end
+	end
+	return table.concat(out)
+end
+local src = b64decode("bG9jYWwgbSA9IGdhbWUuUmVwbGljYXRlZEZpcnN0LkFsbFNpZGVDb2RlLlRvb2xTeXN0ZW0uQXJtV3Jlc3RsZUNvbmZpZwptLlNvdXJjZSAuLj0gWz1bdEZpeGVkKG46IG51bWJlcik6IHN0cmluZwoJbiA9IG1hdGgubWF4KHRvbnVtYmVyKG4pIG9yIDAsIDApCglsb2NhbCBzdWZmaXhlcyA9IHsgIiIsICJLIiwgIk0iLCAiQiIsICJUIiwgIlFhIiwgIlFpIiB9Cglsb2NhbCBpID0gMQoJLS0gOTk5LjUg57qn5Yir5Zub6IiN5LqU5YWl5ZCO5Lya5Y+Y5oiQIDQg5L2N5pW05pWw77yM5o+Q5YmN6L+b5L2N5Yiw5LiL5LiA5Liq5Y2V5L2NCgl3aGlsZSBuID49IDk5OS41IGFuZCBpIDwgI3N1ZmZpeGVzIGRvCgkJbiAvPSAxMDAwCgkJaSArPSAxCgllbmQKCWlmIGkgPT0gMSB0aGVuCgkJcmV0dXJuIHRvc3RyaW5nKG1hdGguZmxvb3IobiArIDAuNSkpCgllbmQKCWxvY2FsIGZtdCA9IGlmIG4gPj0gOTkuOTUgdGhlbiAiJS4wZiIgZWxzZWlmIG4gPj0gOS45OTUgdGhlbiAiJS4xZiIgZWxzZSAiJS4yZiIKCXJldHVybiBzdHJpbmcuZm9ybWF0KGZtdCwgbikgLi4gc3VmZml4ZXNbaV0KZW5kCgotLVtbCgnlhbPljaHljp/ngrkKCUBwYXJhbSBsZXZlbEluZGV4IG51bWJlciAtIDEtYmFzZWQKCUByZXR1cm4gVmVjdG9yMyAtIOWOn+eCuQpdXQpmdW5jdGlvbiBBcm1XcmVzdGxlQ29uZmlnLlpvbmVPcmlnaW4obGV2ZWxJbmRleDogbnVtYmVyKTogVmVjdG9yMwoJcmV0dXJuIFZlY3RvcjMubmV3KChsZXZlbEluZGV4IC0gMSkgKiBBcm1XcmVzdGxlQ29uZmlnLlpvbmVMZW5ndGgsIDAsIDApCmVuZAoKLS1bWwoJ5a+55bGA57uT5p2f5Ye65Zy65L2N5ae/77yaRVhJVF9BVFRSIOayv+WFtuacneWQkeWkluaOqCBFWElUX1BVU0hfU1RVRFPvvIzlho3msLTlubPovazlkJHmoYzlrZDvvIzmlrnkvr/njqnlrrbovazouqvlsLHog73lho3mrKHkuqTkupIKCe+8iOacjeWKoeerryBCYXR0bGUg5Ye65Zy65YaZIEhSUOOAgeWuouaIt+err+S6pOi/mOmVnOWktOaXtuaRhuacuuS9jeWFseeUqO+8jOS/neivgeS4pOS+p+acneWQkeS4gOiHtO+8iQoJQHBhcmFtIHRhYmxlTW9kZWwgTW9kZWwgLSDmr5TotZvmoYzvvIjor7sgRVhJVF9BVFRS77yM5qGM6Z2i5Lit5b+D6K+7IFBpdm90IOWxnuaAp++8jOe8uuecgeeUqOaooeWeiyBQaXZvdO+8iQoJQHJldHVybiBDRnJhbWU/IC0g5Ye65Zy6IEhSUCDkvY3lp7/vvIjpnaLmnJ3moYzlrZDvvInvvJvmoYzlrZDnvLrlsJEgRVhJVF9BVFRSIOaXtuS4uiBuaWwKXV0KZnVuY3Rpb24gQXJtV3Jlc3RsZUNvbmZpZy5HZXRFeGl0Q0ZyYW1lKHRhYmxlTW9kZWw6IE1vZGVsKTogQ0ZyYW1lPwoJbG9jYWwgZXhpdENmID0gdGFibGVNb2RlbDpHZXRBdHRyaWJ1dGUoQXJtV3Jlc3RsZUNvbmZpZy5FWElUX0FUVFIpCglpZiB0eXBlb2YoZXhpdENmKSB+PSAiQ0ZyYW1lIiB0aGVuCgkJcmV0dXJuIG5pbAoJZW5kCglsb2NhbCBwb3MgPSBleGl0Q2YuUG9zaXRpb24gKyBleGl0Q2YuTG9va1ZlY3RvciAqIEFybVdyZXN0bGVDb25maWcuRVhJVF9QVVNIX1NUVURTCglsb2NhbCBjZW50ZXIgPSB0YWJsZU1vZGVsOkdldEF0dHJpYnV0ZSgiUGl2b3QiKQoJaWYgdHlwZW9mKGNlbnRlcikgfj0gIlZlY3RvcjMiIHRoZW4KCQljZW50ZXIgPSB0YWJsZU1vZGVsOkdldFBpdm90KCkuUG9zaXRpb24KCWVuZAoJbG9jYWwgbG9vayA9IFZlY3RvcjMubmV3KGNlbnRlci5YLCBwb3MuWSwgY2VudGVyLlopCglpZiAobG9vayAtIHBvcykuTWFnbml0dWRlIDwgMWUtMyB0aGVuCgkJcmV0dXJuIENGcmFtZS5uZXcocG9zKSAqIGV4aXRDZi5Sb3RhdGlvbgoJZW5kCglyZXR1cm4gQ0ZyYW1lLmxvb2tBdChwb3MsIGxvb2spCmVuZAoKLS1bWwoJ5Z+656GA6KGM6LWw6YCf5bqm77yIQ01TIOm7mOiupO+8iQoJQHJldHVybiBudW1iZXIgLSAxNgpdXQpmdW5jdGlvbiBBcm1XcmVzdGxlQ29uZmlnLkdldEJhc2VXYWxrU3BlZWQoKTogbnVtYmVyCglyZXR1cm4gX1dBTEtfU1BFRURbMV0uVmFsdWUKZW5kCgotLVtbCgnmn6Xmib7lk5Hpk4MgVG9vbCDmqKHmnb/vvIhSZXBsaWNhdGVkU3RvcmFnZSAvIFRPT0xfQVNTRVRfUEFUSCAvIFRPT0xfTkFNRe+8iQoJQHJldHVybiBUb29sPyAtIOaooeadv+acrOS9k++8jOiwg+eUqOaWuemhuyBDbG9uZSDlkI7kvb/nlKjjgIHnpoHmraLnm7TmjqXkv67mlLnvvJvot6/lvoTnvLrlpLHmiJbnsbvlnovkuI3mmK8gVG9vbCDml7bkuLogbmlsCl1dCmZ1bmN0aW9uIEFybVdyZXN0bGVDb25maWcuRmluZFRvb2xUZW1wbGF0ZSgpOiBUb29sPwoJbG9jYWwgbm9kZTogSW5zdGFuY2U/ID0gUmVwbGljYXRlZFN0b3JhZ2UKCWZvciBfLCBuYW1lIGluIGlwYWlycyhBcm1XcmVzdGxlQ29uZmlnLlRPT0xfQVNTRVRfUEFUSCkgZG8KCQlub2RlID0gbm9kZSBhbmQgbm9kZTpGaW5kRmlyc3RDaGlsZChuYW1lKQoJZW5kCglsb2NhbCB0ZW1wbGF0ZSA9IG5vZGUgYW5kIG5vZGU6RmluZEZpcnN0Q2hpbGQoQXJtV3Jlc3RsZUNvbmZpZy5UT09MX05BTUUpCglpZiB0ZW1wbGF0ZSBhbmQgdGVtcGxhdGU6SXNBKCJUb29sIikgdGhlbgoJCXJldHVybiB0ZW1wbGF0ZQoJZW5kCglyZXR1cm4gbmlsCmVuZAoKcmV0dXJuIEFybVdyZXN0bGVDb25maWcKXT1dCnJldHVybiAjbS5Tb3VyY2UK")
+local fn, err = load(src)
+assert(fn, err)
+return fn()

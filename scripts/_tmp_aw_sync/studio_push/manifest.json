@@ -1,0 +1,56 @@
+[
+  {
+    "name": "ConfigInstance",
+    "inst": "game.ReplicatedFirst.AllSideCode.ToolBasic.ConfigInstance",
+    "parts": 8,
+    "chars": 18861
+  },
+  {
+    "name": "Language",
+    "inst": "game.ReplicatedFirst.AllSideCode.ToolBasic.TranslationHelper.Language",
+    "parts": 12,
+    "chars": 29967
+  },
+  {
+    "name": "ArmWrestleConfig",
+    "inst": "game.ReplicatedFirst.AllSideCode.ToolSystem.ArmWrestleConfig",
+    "parts": 12,
+    "chars": 27590
+  },
+  {
+    "name": "CfgFind",
+    "inst": "game.ReplicatedFirst.AllSideCode.ToolSystem.CfgFind",
+    "parts": 6,
+    "chars": 14278
+  },
+  {
+    "name": "SystemBuyRoblox",
+    "inst": "game.ServerStorage.ServerSideCode.System.SystemBuyRoblox",
+    "parts": 7,
+    "chars": 16816
+  },
+  {
+    "name": "SystemBuyRobloxClient",
+    "inst": "game.ReplicatedStorage.ClientSideCode.SystemModule.SystemBuyRoblox",
+    "parts": 2,
+    "chars": 4362
+  },
+  {
+    "name": "Common",
+    "inst": "game.ReplicatedStorage.ClientSideCode.GuiScripts.ModuleScript.ArmWrestleHUD.Common",
+    "parts": 5,
+    "chars": 10722
+  },
+  {
+    "name": "Economy",
+    "inst": "game.ServerStorage.ServerSideCode.System.SystemArmWrestle.Economy",
+    "parts": 9,
+    "chars": 22239
+  },
+  {
+    "name": "SystemArmWrestle",
+    "inst": "game.ServerStorage.ServerSideCode.System.SystemArmWrestle",
+    "parts": 7,
+    "chars": 15385
+  }
+]

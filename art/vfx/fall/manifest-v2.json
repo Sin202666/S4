@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "texture": "speed-needle-v2.png",
+  "source": "speed-needle-v2.svg",
+  "generator": "scripts/build_fall_needle.py",
+  "method": "Cubic Bezier silhouette, 4x supersampled alpha, white RGB",
+  "dimensions": [1024, 1024],
+  "assetId": "115899872681541",
+  "owner": "KentGarden",
+  "uploadDate": "2026-10-13",
+  "verifiedPlaceId": "135608499142380",
+  "loadVerified": true,
+  "publishedGame": false,
+  "reference": "20261013100944_rec_.mp4",
+  "referenceFps": 30,
+  "observedSeconds": { "firstStreak": 1.43, "build": 1.50, "landing": 1.70, "clear": 1.90 },
+  "notes": "Video-derived reconstruction. Times approximate; original emitter settings and random seed unavailable. 1:1 acceptance not claimed."
+}

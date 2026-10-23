@@ -1,0 +1,14 @@
+{
+  "generator": "Built-in imagegen",
+  "source": "speed-needle.png",
+  "assetId": "rbxassetid://89927806150053",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "mode": "RGBA",
+  "prompt": "Use case: stylized-concept. Asset type: production-ready Roblox ParticleEmitter VFX sprite texture, 1024x1024 PNG with TRUE transparent alpha background. Primary request: ONE single perfectly vertical extremely slender WHITE anime falling-speed streak, centered, pure white tintable mask. The shape is a long asymmetrical needle/spindle: from y=70 to y=954, widest part only 32 pixels wide at y=620, smooth gently convex edges tapering continuously into hairline sharp points at BOTH ends. Very subtle soft antialiasing only at the edges, solid opaque white core. The upper end has a very long delicate taper, the lower end a shorter sharp taper. Crisp premium Japanese action-game air slash sprite, graphic, controlled, clean. This is a single isolated texture sprite, NOT an illustration or a scene. Background must be actual alpha=0 transparency throughout, NOT black, NOT checkerboard painted into the image. No glow cloud, no ring, no additional streaks, no sparks, no perspective, no shadow, no text, no border, no watermark. Output the actual usable PNG with transparency and preserve its file path.",
+  "usage": "Tintable vertical needle; ParticleEmitter VelocityParallel, Rotation 90 degrees. Shared by white, ink, and fine layers.",
+  "verifiedPlaceId": 135608499142380,
+  "verifiedAssetFetchStatus": "Success"
+}

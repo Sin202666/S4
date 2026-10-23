@@ -1,0 +1,428 @@
+﻿--[[
+	Module: BattlePose
+	Description: 扳手腕对局 R6 臂姿：右手尖端对准共用握拳点（随 P 倾斜）；左手固定扶桌，盖掉 AW_Battle 抬臂
+	Author: 程莘
+	Created: 2026-10-16
+	Last Modified: 2026-10-16
+
+	功能：
+	- Begin / Stop：对局开始接管、结束释放（Release / End / 重生）
+	- 每帧 BindToRenderStep(Last) 在 Animator 之后写双肩 Transform
+	- 右手：按肩到握拳点距离临时加长 Size/C1，仅用纯旋转 Transform 对准（Transform 平移会被动画管线丢掉）
+	- 左手：尖端锁在己侧桌面扶点，不随 P 移动
+
+	约束：
+	- 纯本地表现；不写 HRP / CFrame / 存档；镜头仍由 SystemArmWrestle
+	- 对局期 Left/Right Arm 的 Transform（及右臂 Size/C1）唯一写口
+
+	加载（仅 SystemArmWrestle 内部）：
+		local BattlePose = require(script.BattlePose)
+		BattlePose.Begin(tableModel, LocalPlayer.Character)
+		BattlePose.Stop()
+]]
+
+local Utils = require(game.ReplicatedFirst.AllSideCode.UtilsSystem)
+local RunService = Utils.RunService
+local ArmWrestleConfig = Utils.ArmWrestleConfig
+
+local BattlePose = {}
+
+local SEAT_ATTR = ArmWrestleConfig.SEAT_ATTR
+local OPP_PIVOT_ATTR = "OppPivot"
+local OPPONENT_MODEL_NAME = ArmWrestleConfig.OPPONENT_MODEL_NAME
+local RIGHT_ARM = "Right Arm"
+local RIGHT_SHOULDER = "Right Shoulder"
+local LEFT_ARM = "Left Arm"
+local LEFT_SHOULDER = "Left Shoulder"
+local FLAT = Vector3.new(1, 0, 1)
+local UP = Vector3.yAxis
+local BIND_NAME = "ArmWrestleBattlePose"
+-- 高于 Last，尽量压过同帧其它写 Transform 的逻辑
+local BIND_PRIORITY = Enum.RenderPriority.Last.Value + 100
+
+local MAX_TILT_OFFSET = 0.45
+-- 关节到尖端 ≈ Size.Y * JOINT_TO_TIP（R6 默认 Size.Y=2、C1.Y=0.5 → 1.5）
+local JOINT_TO_TIP = 0.75
+local REACH_MIN = 2.0
+local REACH_MAX = 5.0
+local HAND_HEIGHT = 0.8
+-- 握拳点相对双肩中点略下压，缩短伸距、姿势更靠桌
+local MEET_DROP = 0.55
+local LEFT_FORWARD = 0.4
+local LEFT_SIDE = 1.0
+
+type ArmState = {
+	Motor: Motor6D,
+	Torso: BasePart,
+	Arm: BasePart,
+	OrigSize: Vector3,
+	OrigC1: CFrame,
+}
+
+type Session = {
+	Table: Model,
+	Character: Model?,
+	Player: ArmState?,
+	Opponent: ArmState?,
+	PlayerLeft: ArmState?,
+	OpponentLeft: ArmState?,
+	Bound: boolean,
+}
+
+local _session: Session? = nil
+
+--[[
+	取 R6 指定侧肩与手臂，并记下原始尺寸 / C1
+	@param model Model? - 角色或对手
+	@param armName string - 手臂零件名
+	@param shoulderName string - 肩关节名
+	@return ArmState? - 肩关节状态
+]]
+local function _getArm(model: Model?, armName: string, shoulderName: string): ArmState?
+	if not model or not model.Parent then
+		return nil
+	end
+	local torso = model:FindFirstChild("Torso")
+	local arm = model:FindFirstChild(armName)
+	if not torso or not torso:IsA("BasePart") or not arm or not arm:IsA("BasePart") then
+		return nil
+	end
+	local motor = torso:FindFirstChild(shoulderName)
+	if not motor or not motor:IsA("Motor6D") then
+		return nil
+	end
+	return {
+		Motor = motor,
+		Torso = torso,
+		Arm = arm,
+		OrigSize = arm.Size,
+		OrigC1 = motor.C1,
+	}
+end
+
+--[[
+	Fist / Pivot 握拳高度参考
+	@param tableModel Model - 桌子
+	@return Vector3 - 参考点
+]]
+local function _getFistPos(tableModel: Model): Vector3
+	local fist = tableModel:FindFirstChild("Fist")
+	if fist and fist:IsA("BasePart") then
+		return fist.Position
+	end
+	local pivot = tableModel:GetAttribute("Pivot")
+	if typeof(pivot) == "Vector3" then
+		return pivot + UP * HAND_HEIGHT
+	end
+	return tableModel:GetPivot().Position + UP * HAND_HEIGHT
+end
+
+--[[
+	桌面顶面高度
+	@param tableModel Model - 桌子
+	@return number - 世界 Y
+]]
+local function _getTableTopY(tableModel: Model): number
+	local top = tableModel:FindFirstChild("Top")
+	if top and top:IsA("BasePart") then
+		return top.Position.Y + top.Size.Y * 0.5
+	end
+	return _getFistPos(tableModel).Y - 0.6
+end
+
+--[[
+	水平单位方向
+	@param v Vector3 - 任意向量
+	@param fallback Vector3 - 备用
+	@return Vector3 - 水平单位向量
+]]
+local function _flatUnit(v: Vector3, fallback: Vector3): Vector3
+	local f = v * FLAT
+	if f.Magnitude > 1e-3 then
+		return f.Unit
+	end
+	local fb = fallback * FLAT
+	return if fb.Magnitude > 1e-3 then fb.Unit else Vector3.zAxis
+end
+
+--[[
+	肩关节世界坐标
+	@param state ArmState - 手臂
+	@return Vector3 - 肩位
+]]
+local function _shoulderPos(state: ArmState): Vector3
+	return (state.Torso.CFrame * state.Motor.C0).Position
+end
+
+--[[
+	加长手臂使关节→尖端 = dist（Transform 只能靠旋转够到目标）
+	@param state ArmState - 手臂
+	@param dist number - 肩到目标距离
+]]
+local function _setReach(state: ArmState, dist: number)
+	local reach = math.clamp(dist / JOINT_TO_TIP, REACH_MIN, REACH_MAX)
+	local arm = state.Arm
+	if not arm.Parent then
+		return
+	end
+	local origY = state.OrigSize.Y
+	if origY < 1e-3 then
+		return
+	end
+	if math.abs(arm.Size.Y - reach) > 0.005 then
+		arm.Size = Vector3.new(state.OrigSize.X, reach, state.OrigSize.Z)
+	end
+	local c1 = state.OrigC1
+	local scale = reach / origY
+	local newC1 = CFrame.new(c1.X, c1.Y * scale, c1.Z) * (c1 - c1.Position)
+	if (state.Motor.C1.Position - newC1.Position).Magnitude > 0.001 then
+		state.Motor.C1 = newC1
+	end
+end
+
+--[[
+	还原手臂
+	@param state ArmState? - 手臂
+	@param restoreSize boolean - 是否还原 Size/C1
+]]
+local function _restoreArm(state: ArmState?, restoreSize: boolean)
+	if not state or not state.Arm.Parent then
+		return
+	end
+	if restoreSize then
+		state.Arm.Size = state.OrigSize
+		if state.Motor.Parent then
+			state.Motor.C1 = state.OrigC1
+		end
+	end
+	if state.Motor.Parent then
+		state.Motor.Transform = CFrame.identity
+	end
+end
+
+--[[
+	纯旋转对准 tip：关节钉在 shoulder，-Y 朝 tip（不加 Transform 平移）
+	@param state ArmState - 手臂
+	@param shoulder Vector3 - 肩关节世界坐标
+	@param tip Vector3 - 尖端目标
+]]
+local function _applyTip(state: ArmState, shoulder: Vector3, tip: Vector3)
+	local motor = state.Motor
+	local arm = state.Arm
+	if not motor.Parent or not arm.Parent then
+		return
+	end
+	local toTip = tip - shoulder
+	local dir = if toTip.Magnitude > 0.05 then toTip.Unit else -UP
+	local jointLocal = motor.C1.Position
+
+	local up = -dir
+	local right = up:Cross(UP)
+	if right.Magnitude < 0.12 then
+		right = up:Cross(Vector3.xAxis)
+	end
+	right = right.Unit
+	local back = right:Cross(up)
+	local rot = CFrame.fromMatrix(Vector3.zero, right, up, back)
+	local center = shoulder - rot:VectorToWorldSpace(jointLocal)
+	local desiredArm = CFrame.new(center) * rot
+
+	-- 只要旋转分量：动画管线会丢掉 Transform 平移，靠臂长保证尖端够得到
+	local full = motor.C0:Inverse() * state.Torso.CFrame:Inverse() * desiredArm * motor.C1
+	motor.Transform = full - full.Position
+end
+
+--[[
+	共用握拳点：双肩水平中点、高度取双肩中点下压，保证两边距离接近且够得到
+	@param sp Vector3 - 玩家肩
+	@param so Vector3 - 对手肩
+	@param tiltAxis Vector3 - 玩家→对手轴
+	@param p number - 进度
+	@return Vector3 - 握拳点
+]]
+local function _meetPoint(sp: Vector3, so: Vector3, tiltAxis: Vector3, p: number): Vector3
+	local mid = (sp + so) * 0.5
+	local slam = UP:Cross(tiltAxis)
+	local bias = Vector3.zero
+	if slam.Magnitude > 1e-3 then
+		bias = slam.Unit * ((p - 0.5) * 2 * MAX_TILT_OFFSET)
+	end
+	return Vector3.new(mid.X, mid.Y - MEET_DROP, mid.Z) + bias
+end
+
+--[[
+	己侧左手扶桌点
+	@param seatPos Vector3 - 座位参考
+	@param facing Vector3 - 看向对手
+	@param topY number - 桌面 Y
+	@return Vector3 - 左手尖端目标
+]]
+local function _leftRestPoint(seatPos: Vector3, facing: Vector3, topY: number): Vector3
+	local face = _flatUnit(facing, Vector3.zAxis)
+	local left = UP:Cross(face)
+	if left.Magnitude < 1e-3 then
+		left = Vector3.xAxis
+	else
+		left = left.Unit
+	end
+	local p = seatPos + face * LEFT_FORWARD + left * LEFT_SIDE
+	return Vector3.new(p.X, topY, p.Z)
+end
+
+--[[
+	把目标点钳在肩可达半径内（左手不拉超长）
+	@param shoulder Vector3 - 肩
+	@param target Vector3 - 目标
+	@param maxDist number - 最大伸距
+	@return Vector3 - 钳制后目标
+]]
+local function _clampToReach(shoulder: Vector3, target: Vector3, maxDist: number): Vector3
+	local delta = target - shoulder
+	if delta.Magnitude <= maxDist then
+		return target
+	end
+	return shoulder + delta.Unit * maxDist
+end
+
+--[[
+	补解析左右臂
+	@param s Session - 会话
+]]
+local function _resolveArms(s: Session)
+	if not s.Player or not s.Player.Motor.Parent then
+		s.Player = _getArm(s.Character, RIGHT_ARM, RIGHT_SHOULDER)
+	end
+	if not s.Opponent or not s.Opponent.Motor.Parent then
+		s.Opponent = _getArm(s.Table:FindFirstChild(OPPONENT_MODEL_NAME) :: Model?, RIGHT_ARM, RIGHT_SHOULDER)
+	end
+	if not s.PlayerLeft or not s.PlayerLeft.Motor.Parent then
+		s.PlayerLeft = _getArm(s.Character, LEFT_ARM, LEFT_SHOULDER)
+	end
+	if not s.OpponentLeft or not s.OpponentLeft.Motor.Parent then
+		s.OpponentLeft = _getArm(s.Table:FindFirstChild(OPPONENT_MODEL_NAME) :: Model?, LEFT_ARM, LEFT_SHOULDER)
+	end
+end
+
+--[[
+	一帧：右手相握 + 左手扶桌
+	@param s Session - 会话
+]]
+local function _step(s: Session)
+	local tableModel = s.Table
+	if not tableModel.Parent then
+		BattlePose.Stop()
+		return
+	end
+	_resolveArms(s)
+	if not s.Player and not s.Opponent and not s.PlayerLeft and not s.OpponentLeft then
+		return
+	end
+
+	local p = tableModel:GetAttribute("P")
+	if typeof(p) ~= "number" then
+		p = 0.5
+	end
+	local seat = tableModel:GetAttribute(SEAT_ATTR)
+	local oppCf = tableModel:GetAttribute(OPP_PIVOT_ATTR)
+	local tiltAxis = Vector3.xAxis
+	if typeof(seat) == "CFrame" and typeof(oppCf) == "CFrame" then
+		tiltAxis = _flatUnit(oppCf.Position - seat.Position, Vector3.xAxis)
+	end
+
+	local fist = _getFistPos(tableModel)
+	local topY = _getTableTopY(tableModel)
+	local sp = if s.Player then _shoulderPos(s.Player) else fist
+	local so = if s.Opponent then _shoulderPos(s.Opponent) else fist
+	if not s.Player and typeof(seat) == "CFrame" then
+		sp = seat.Position + UP * 0.5
+	end
+	if not s.Opponent and typeof(oppCf) == "CFrame" then
+		so = oppCf.Position + UP * 0.5
+	end
+
+	local meet = _meetPoint(sp, so, tiltAxis, p)
+
+	if s.Player then
+		local shoulder = _shoulderPos(s.Player)
+		_setReach(s.Player, (meet - shoulder).Magnitude)
+		_applyTip(s.Player, shoulder, meet)
+	end
+	if s.Opponent then
+		local shoulder = _shoulderPos(s.Opponent)
+		_setReach(s.Opponent, (meet - shoulder).Magnitude)
+		_applyTip(s.Opponent, shoulder, meet)
+	end
+
+	if s.PlayerLeft and typeof(seat) == "CFrame" then
+		local shoulder = _shoulderPos(s.PlayerLeft)
+		local maxDist = s.PlayerLeft.OrigSize.Y * JOINT_TO_TIP
+		local rest = _clampToReach(shoulder, _leftRestPoint(seat.Position, tiltAxis, topY), maxDist)
+		_applyTip(s.PlayerLeft, shoulder, rest)
+	end
+	if s.OpponentLeft and typeof(oppCf) == "CFrame" then
+		local shoulder = _shoulderPos(s.OpponentLeft)
+		local maxDist = s.OpponentLeft.OrigSize.Y * JOINT_TO_TIP
+		local rest = _clampToReach(shoulder, _leftRestPoint(oppCf.Position, -tiltAxis, topY), maxDist)
+		_applyTip(s.OpponentLeft, shoulder, rest)
+	end
+end
+
+--[[
+	对局开始
+	@param tableModel Model? - 桌子
+	@param character Model? - 本地角色
+]]
+function BattlePose.Begin(tableModel: Model?, character: Model?)
+	BattlePose.Stop()
+	if not tableModel then
+		return
+	end
+	local oppModel = tableModel:FindFirstChild(OPPONENT_MODEL_NAME) :: Model?
+	local s: Session = {
+		Table = tableModel,
+		Character = character,
+		Player = _getArm(character, RIGHT_ARM, RIGHT_SHOULDER),
+		Opponent = _getArm(oppModel, RIGHT_ARM, RIGHT_SHOULDER),
+		PlayerLeft = _getArm(character, LEFT_ARM, LEFT_SHOULDER),
+		OpponentLeft = _getArm(oppModel, LEFT_ARM, LEFT_SHOULDER),
+		Bound = false,
+	}
+	_session = s
+	RunService:BindToRenderStep(BIND_NAME, BIND_PRIORITY, function()
+		if _session == s then
+			_step(s)
+		end
+	end)
+	s.Bound = true
+end
+
+--[[
+	结束：还原右臂长 / C1，清左右 Transform
+]]
+function BattlePose.Stop()
+	local s = _session
+	if not s then
+		return
+	end
+	_session = nil
+	if s.Bound then
+		pcall(function()
+			RunService:UnbindFromRenderStep(BIND_NAME)
+		end)
+	end
+	_restoreArm(s.Player, true)
+	_restoreArm(s.Opponent, true)
+	_restoreArm(s.PlayerLeft, false)
+	_restoreArm(s.OpponentLeft, false)
+end
+
+--[[
+	是否正在摆对局臂姿
+	@return boolean - true 表示对局姿势接管中
+]]
+function BattlePose.IsActive(): boolean
+	return _session ~= nil
+end
+
+return BattlePose
+

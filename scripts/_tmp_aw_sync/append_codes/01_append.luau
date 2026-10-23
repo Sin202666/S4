@@ -1,0 +1,95 @@
+local m = game.ReplicatedFirst.AllSideCode.ToolSystem.ArmWrestleConfig
+m.Source ..= [=[--[[
+	Module: ArmWrestleConfig
+	Description: 扳手腕玩法共享配置（关卡、手臂、材质、哑铃、升级、商品表）
+	Author: 程莘
+	Created: 2026-10-14
+	Last Modified: 2026-10-16
+
+	功能：
+	- 提供关卡/对手/手臂/材质/哑铃/训练与移速阶、Studio 商品表
+	- 成长与对局数值来自导表：AWConst / AWMaterial / AWArm / AWDumbbell / AWUpgrade / AWLevel / AWOpponent
+	- ApplyDumbbellLook：按哑铃配置给模板克隆体改色（服务端发 Tool、客户端卡片预览共用）
+	- 手臂 / 材质 / 哑铃条目的 Rarity 均指向 _RARITIES（GetRarity），仅用于 UI 底色、文案与表现档位，不参与结算
+	- 手臂 / 材质 / 哑铃条目的 Icon：弹窗卡片 Preview（ImageLabel）展示图，带黑描边的透明 PNG（rbxassetid，群组资源）
+	- 材质抽取权重读条目自身 Weight（与稀有度解耦，改稀有度不改掉率）；缺省才回退 _RARITIES.Weight；PoolOdds 仅按 Weight
+	- 查询 API 一律返回深拷贝，禁止把内存表活引用交给调用方
+	- 玩家可见名称走 ZhName / ZhDes，由 TranslationHelper 按字面量或 Zh* 字段翻译
+
+	与相关模块：
+	- SystemArmWrestle 读本表做服务端结算；客户端只读展示
+	- 不写存档、不发奖、不绑 Remote
+	- 稀有度 / GamePass / Developer Product / 药水仍本文件常量表（未进 Excel）
+	- 线上 Robux 商品 Id 一期全为 0，仅 Studio DevGrant 可用
+	- 填入真实 Id 后，Strength / StrengthTier / Cash / Potion 种类经 SystemBuyRoblox.ProcessReceipt 幂等发货（FindReceiptProductKey）
+	- 通行证真实 Id 经 FindGamePassKey 反查；拥有权以 Roblox 为准（进服 UserOwnsGamePassAsync），不落存档
+	- 力量倍数档 StrengthTier1..6 为替换式（x2..x64），GetStrengthTierMult 由 Profile.GetMults 唯一消费
+	- 药水 GetPotion：库存是背包物品（ItemId 对应 itemdataConf 201~203），使用后按在线秒数计时（服务端 SystemArmWrestle.Potion）
+	- 商城分区顺序：ShopPassOrder / ShopPackOrder / PotionOrder
+	- FormatFixed：三位有效数字价签（1.00T / 10.0B）；Format 为通用缩写（去尾零）
+	- 离线奖励参数 OFFLINE_RATE / OFFLINE_MIN_SEC / OFFLINE_MAX_SEC：服务端 SystemArmWrestle.Offline 结算
+	- 菜单挽留礼物倍数 MENU_GIFT_CASH_MULT：服务端 SystemArmWrestle.MenuGift 结算（每账号一次）
+	- 数值设计说明见 docs/扳手腕数值设计说明.md
+
+	加载：
+		local Utils = require(game.ReplicatedFirst.AllSideCode.UtilsSystem)
+		local ArmWrestleConfig = Utils.ArmWrestleConfig
+		local arm = ArmWrestleConfig.GetArm(1)
+]]
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local Utils = require(game.ReplicatedFirst.AllSideCode.UtilsSystem)
+local Copy = Utils.Copy
+local ConfigInstance = Utils.ConfigInstance
+
+local ArmWrestleConfig = {}
+
+local function _clone(value: any): any
+	if type(value) ~= "table" then
+		return value
+	end
+	return Copy.deepCopy(value)
+end
+
+--[[
+	读 AWConst 数值；缺行或缺 Value 时用 fallback
+	@param key string - 常量键（与 AWConst.xlsx Key 一致）
+	@param fallback number - 缺省值
+	@return number - 表值或 fallback
+]]
+local function _const(key: string, fallback: number): number
+	local row = ConfigInstance.awconstConf and ConfigInstance.awconstConf[key]
+	local value = row and row.Value
+	if type(value) == "number" then
+		return value
+	end
+	return fallback
+end
+
+--[[
+	RGB 三列拼 Color3
+	@param r number? - 红 0–255
+	@param g number? - 绿 0–255
+	@param b number? - 蓝 0–255
+	@return Color3 - 颜色
+]]
+local function _rgb(r: number?, g: number?, b: number?): Color3
+	return Color3.fromRGB(r or 0, g or 0, b or 0)
+end
+
+--[[
+	导表行最大数字主键
+	@param conf table - ConfigInstance 子表
+	@return number - 最大 Id；空表为 0
+]]
+local function _maxNumericKey(conf: { [any]: any }): number
+	local maxId = 0
+	for id in pairs(conf) do
+		if type(id) == "number" and id > maxId then
+			maxId = id
+		end
+	end
+	return ]=]
+return #m.Source

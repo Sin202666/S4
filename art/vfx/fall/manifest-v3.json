@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "texture": "fall-stroke-flipbook-v3.png",
+  "source": "fall-stroke-flipbook-v3.svg",
+  "generator": "scripts/build_fall_flipbook.py",
+  "assetId": "123981207090182",
+  "owner": "KentGarden",
+  "uploadDate": "2026-10-13",
+  "dimensions": [1024, 1024],
+  "grid": [4, 4],
+  "playback": "OneShot over particle lifetime, blend adjacent frames",
+  "lengthFactors": [0.72, 1, 1, 0.95, 0.84, 0.71, 0.58, 0.46, 0.35, 0.26, 0.19, 0.13, 0.085, 0.05, 0.025, 0],
+  "design": "Keep a solid stroke as length contracts; alpha fade only at the end. Vector authored, no existing bitmap edits.",
+  "publishedGame": false,
+  "acceptance": "Pending full dynamic reference review; no numerical fidelity rating."
+}

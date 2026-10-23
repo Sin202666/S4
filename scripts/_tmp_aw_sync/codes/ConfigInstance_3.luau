@@ -1,0 +1,64 @@
+local folder = game.ReplicatedStorage:FindFirstChild("_TmpAwSync")
+if not folder then
+	folder = Instance.new("Folder")
+	folder.Name = "_TmpAwSync"
+	folder.Parent = game.ReplicatedStorage
+end
+local sub = folder:FindFirstChild("ConfigInstance")
+if not sub then
+	sub = Instance.new("Folder")
+	sub.Name = "ConfigInstance"
+	sub.Parent = folder
+end
+local v = sub:FindFirstChild("3")
+if not v then
+	v = Instance.new("StringValue")
+	v.Name = "3"
+	v.Parent = sub
+end
+v.Value = [=[.itemshopdataConf={
+	[1]={"双倍幸运","双倍幸运描述","LuckX2","","","","",2,1489329041,"3412848849",199,"",{},{},{"119377429859111"},"2"},
+	[2]={"机器礼包1","机器礼包1描述","MachinePack1","","","","",1,3412830887,"3412835012",69,"",{8100003,8200002},{1},{"128053029377978","127280162932038"},"3"},
+	[3]={"一键解锁在线奖励","","OnlineAwardClaimAll","","","","",1,3612011629,"",79,"",{},{},{},""}
+}
+
+ConfigInstance.mountConf={
+	[6001001]={"独角兽","GroundMount","独角兽",3,"ForceExit","",3,1.5,"MountSaddle","MountGround","MountUnicorn","{\"AccelSec\":0.9,\"DecelSec\":1.35,\"TurnRateDeg\":220,\"TurnHighSpeedMul\":0.38,\"TurnSpeedPow\":1.35,\"TurnAlignMin\":0.65,\"TurnAlignPow\":1.1,\"AboutFaceDot\":-0.75,\"AboutFaceAlignMin\":0,\"AboutFaceTurnMul\":2.9,\"AboutFaceBrake\":160,\"AboutFaceCompleteDeg\":12,\"AboutFaceStickBack\":0.9,\"AboutFaceCooldownSec\":0.2,\"AirTurnMul\":0.85,\"AirFlipTurnMul\":2.6,\"DoubleJumpFlipWindowSec\":0.4,\"AirFlipVelAlign\":8,\"DoubleJumpVelBlend0\":0.45,\"DoubleJumpRedirectSec\":0.22,\"JumpHeight\":22,\"DoubleJumpSpeed\":55,\"AirGravityScale\":0.72,\"CanDoubleJump\":1,\"AirThrottleMul\":1,\"AirFlipThrottleMul\":1,\"AirSpeedMaintainSoft\":0.9,\"AirSpeedLeanRate\":8,\"AirCoastDecel\":6,\"FirstJumpMinFlat\":16,\"FirstJumpSnapFrac\":0.6,\"FirstJumpRampSec\":0.06,\"FirstJumpLookAbsorb\":0.08,\"LeapPushSec\":0.24,\"LeapPushAccel\":55,\"LeapPushPow\":1.35,\"LeapStandPushMul\":1.2,\"LeapGallopPushMul\":0.45,\"DoubleJumpPushSec\":0.22,\"DoubleJumpPushAccel\":70,\"AboutFaceTravelDot\":-0.75,\"TurnCruiseDot\":0.85,\"TurnPivotBackStuds\":3.5,\"DoubleJumpMinFlat\":18,\"DriveMode\":\"MountRoot\",\"GroundClearance\":0.08,\"WalkSpeedMul\":0.42,\"GallopEnterThrottle\":0.82,\"GallopEnterHoldSec\":0.55,\"GallopExitThrottle\":0.28,\"WalkAccelSec\":0.5,\"GallopAccelSec\":1.05,\"SlipDecelSec\":1.85,\"BrakeDecelSec\":0.55,\"BrakeSpeed01\":0.36,\"DoubleJumpAirDelaySec\":0.12}"},
+	[6002001]={"测试吉普","WheeledVehicle","Mount_Jeep_Test",5,"ForceExit","",2,0,"","MountVehicle","","{\"MaxSpeed\":80,\"Acceleration\":40,\"TurnRadius\":12}"},
+	[6003001]={"测试飞龙","FlyingCreature","Mount_Dragon_Test",8,"ForceExit","",4,0,"MountDragon","MountFlying","MountDragonBasic","{\"MaxAltitude\":200,\"ClimbRate\":40,\"DescendRate\":35,\"HoverAllowed\":1}"},
+	[6004001]={"测试直升机","Aircraft","Mount_Helicopter_Test",10,"ForceExit","",4,0,"PilotSeat","MountAircraft","MountHeliBasic","{\"ControlScheme\":\"Helicopter\",\"MaxSpeed\":90,\"HoverThrust\":50}"}
+}
+
+ConfigInstance.onlineawardConf={
+	[1]={1,100,300,""},
+	[2]={1,200,600,""},
+	[3]={1,400,900,""},
+	[4]={1,800,1200,""},
+	[5]={1,1500,1500,""},
+	[6]={1,3000,1800,""},
+	[7]={1,5000,2100,""},
+	[8]={1,8000,2400,""},
+	[9]={1,12000,2700,""},
+	[10]={1,20000,3000,""},
+	[11]={1,30000,3300,""},
+	[12]={1,50000,3600,""}
+}
+
+ConfigInstance.petConf={
+	[5001101]={"宠物蛋1",2,5,{1,2},{1,1},"排球狗","排球狗",1.2},
+	[5001102]={"宠物蛋1",3,5,{1,2},{1,1},"乒乓球兔","乒乓球兔",1.5},
+	[5001103]={"宠物蛋1",4,5,{1,2},{1,1},"篮球熊","篮球熊",2},
+	[5001201]={"宠物蛋2",2,5,{1,2},{1,1},"铅笔蜂","铅笔蜂",2},
+	[5001202]={"宠物蛋2",3,5,{1,2},{1,1},"书本熊","书本熊",3},
+	[5001203]={"宠物蛋2",4,5,{1,2},{1,1},"尺子豹","尺子豹",4},
+	[5001204]={"宠物蛋2",5,5,{1,2},{1,1},"博士猴","博士猴",5},
+	[5001301]={"宠物蛋3",2,5,{1,2},{1,1},"兔子向导","兔子向导",5},
+	[5001302]={"宠物蛋3",3,5,{1,2},{1,1},"探险松鼠","探险松鼠",6},
+	[5001303]={"宠物蛋3",4,5,{1,2},{1,1},"矿工猫猫","矿工猫猫",7},
+	[5001304]={"宠物蛋3",80,5,{1,2},{1,1},"寻宝豹","寻宝豹",10}
+}
+
+ConfigInstance.peteggConf={
+	[7000001]={"Egg1","Egg1","Egg1",7,{5001101,5001102,5001103},{524000,300000,110000},1,2,"宠物蛋1"},
+	[7000002]={"Egg2","Egg2","Egg]=]
+return #v.Value

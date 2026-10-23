@@ -1,0 +1,115 @@
+				swayTarget.Rotation = -ICON_SWAY_DEG
+				table.insert(
+					loopTweens,
+					TweenService:Create(
+						swayTarget,
+						TweenInfo.new(ICON_SWAY_SEC, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut, -1, true),
+						{ Rotation = ICON_SWAY_DEG }
+					)
+				)
+			end
+		end
+
+		for _, tween in loopTweens do
+			tween:Play()
+		end
+	end
+
+	for _, tween in _playDotsBounce(preloadFrame:FindFirstChild(DOTS_NAME) :: Frame?) do
+		table.insert(loopTweens, tween)
+	end
+
+	return loopTweens
+end
+
+--[[
+	背景积木纹理斜向循环滚动；位移恰为一个 TileSize，循环重置时无跳变
+	@param canvasGroup CanvasGroup - PreloadGui.CanvasGroup
+	@return Tween? - 循环滚动 Tween，关闭时需 Cancel；无 Bg.BgPattern 时为 nil
+]]
+local function _playBgScroll(canvasGroup: CanvasGroup): Tween?
+	local bg = canvasGroup:FindFirstChild("Bg")
+	local pattern = bg and bg:FindFirstChild(BG_PATTERN_NAME) :: ImageLabel?
+	if not pattern then
+		return nil
+	end
+
+	local tileX = pattern.TileSize.X.Offset
+	local tileY = pattern.TileSize.Y.Offset
+	pattern.Position = UDim2.fromOffset(-tileX, -tileY)
+	local scrollTween = TweenService:Create(
+		pattern,
+		TweenInfo.new(BG_SCROLL_SEC, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1),
+		{ Position = UDim2.fromOffset(0, 0) }
+	)
+	scrollTween:Play()
+	return scrollTween
+end
+
+--[[
+	加载期间仅保留 PreloadGui，其他 ScreenGui 暂存 Enabled 到 Attribute
+	@param localPlayer Player - 本地玩家
+	@param loadEndRef { boolean } - 关闭标志引用，true 时退出循环
+	@return nil - 无返回值
+]]
+local function _runGuiIsolationLoop(localPlayer: Player, loadEndRef: { boolean })
+	local currentCamera = workspace.CurrentCamera
+
+	while true do
+		if loadEndRef[1] then
+			currentCamera.CameraType = Enum.CameraType.Custom
+			return
+		end
+
+		local playerGui = localPlayer:FindFirstChild("PlayerGui") :: PlayerGui?
+		if playerGui then
+			for _, child in playerGui:GetChildren() do
+				if child:IsA("ScreenGui") then
+					if child.Name == PRELOAD_GUI_SHOW_NAME and not child.Enabled then
+						child:SetAttribute("Enabled", false)
+						child.Enabled = true
+					elseif child.Name ~= PRELOAD_GUI_SHOW_NAME and child.Enabled then
+						child:SetAttribute("Enabled", true)
+						child.Enabled = false
+					end
+				end
+			end
+		end
+
+		if loadEndRef[1] then
+			currentCamera.CameraType = Enum.CameraType.Custom
+			return
+		end
+
+		task.wait()
+	end
+end
+
+--[[
+	恢复 PlayerGui 内被隔离的 ScreenGui Enabled 状态
+	@param localPlayer Player - 本地玩家
+	@return nil - 无返回值
+]]
+local function _restorePlayerGui(localPlayer: Player)
+	local playerGui = localPlayer:FindFirstChild("PlayerGui") :: PlayerGui?
+	if not playerGui then
+		return
+	end
+
+	for _, child in playerGui:GetChildren() do
+		if child:IsA("ScreenGui") then
+			local enabled = child:GetAttribute("Enabled")
+			if enabled ~= nil then
+				child.Enabled = enabled
+				child:SetAttribute("Enabled", nil)
+			end
+		end
+	end
+end
+
+--[[
+	解析跳过文案标签（兼容旧 Frame 嵌套与新扁平结构）
+	@param buttonFrame Frame - 跳过按钮根
+	@return TextLabel? - 文案节点
+]]
+local function _findSkipLabel(buttonFrame: Frame): TextLabel?

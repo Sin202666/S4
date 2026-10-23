@@ -1,0 +1,84 @@
+local folder = game.ReplicatedStorage:FindFirstChild("_TmpAwSync")
+if not folder then
+	folder = Instance.new("Folder")
+	folder.Name = "_TmpAwSync"
+	folder.Parent = game.ReplicatedStorage
+end
+local sub = folder:FindFirstChild("ConfigInstance")
+if not sub then
+	sub = Instance.new("Folder")
+	sub.Name = "ConfigInstance"
+	sub.Parent = folder
+end
+local v = sub:FindFirstChild("1")
+if not v then
+	v = Instance.new("StringValue")
+	v.Name = "1"
+	v.Parent = sub
+end
+v.Value = [=["",0,255,230,60,"rbxassetid://98827391711336"},
+	[7]={"翡翠之臂",9,"Epic",10000,0,"",0,60,220,110,"rbxassetid://104373057742300"},
+	[8]={"紫晶之臂",13,"Epic",40000,0,"",0,170,80,255,"rbxassetid://116669000221342"},
+	[9]={"烈焰之臂",18,"Epic",150000,0,"",0,255,110,30,"rbxassetid://125285035215604"},
+	[10]={"深渊之臂",25,"Epic",600000,0,"",0,200,30,60,"rbxassetid://82645023916736"},
+	[11]={"神圣之臂",40,"Legendary",0,249,"HolyArm",0,255,215,90,"rbxassetid://75627413068113"},
+	[12]={"审判之臂",60,"Legendary",0,399,"JudgementArm",250,30,30,40,"rbxassetid://106638998049834"}
+}
+
+ConfigInstance.awconstConf={
+	["EXIT_PUSH_STUDS"]={3},
+	["WIN_CINEMATIC_SEC"]={4.6},
+	["WIN_RELEASE_DELAY_SEC"]={5.2},
+	["LOSE_RELEASE_DELAY_SEC"]={2.6},
+	["LIMITED_ARM_ID"]={12},
+	["LIMITED_SOLD_DEFAULT"]={96},
+	["NEAR_MACHINE_STUDS"]={25},
+	["TABLE_PROMPT_DISTANCE"]={18},
+	["ROLL_ANIM_SEC"]={3.2},
+	["FRIEND_BOOST_PER"]={0.1},
+	["FRIEND_BOOST_MAX"]={0.5},
+	["PREMIUM_BOOST"]={0.25},
+	["OFFLINE_RATE"]={0.1},
+	["OFFLINE_MIN_SEC"]={300},
+	["OFFLINE_MAX_SEC"]={28800},
+	["MENU_GIFT_CASH_MULT"]={10},
+	["ZoneLength"]={170},
+	["ZoneWidth"]={130},
+	["BattleTime"]={15},
+	["TapPower"]={0.035},
+	["OpponentDrift"]={0.13},
+	["MaxTapsPerSecond"]={14},
+	["AutoTapsPerSecond"]={8}
+}
+
+ConfigInstance.awdumbbellConf={
+	[1]={"训练哑铃",1,"Common",0,35,35,40,"Metal",1,190,190,200,"rbxassetid://79149397540649"},
+	[2]={"铁片哑铃",1.3,"Common",150,110,110,120,"DiamondPlate",1.05,190,190,200,"rbxassetid://108608298227670"},
+	[3]={"青铜哑铃",1.7,"Uncommon",600,205,127,50,"Metal",1.1,150,95,45,"rbxassetid://91634863308487"},
+	[4]={"白银哑铃",2.2,"Uncommon",2000,215,220,230,"Metal",1.15,160,165,175,"rbxassetid://83444554423906"},
+	[5]={"黄金哑铃",3,"Rare",7000,255,200,40,"Metal",1.2,200,150,30,"rbxassetid://134229591004130"},
+	[6]={"冰晶哑铃",4,"Rare",25000,120,210,255,"Ice",1.25,210,240,255,"rbxassetid://94366573381853"},
+	[7]={"翡翠哑铃",5.5,"Epic",90000,40,210,110,"Glass",1.3,30,120,70,"rbxassetid://119581829333036"},
+	[8]={"紫晶哑铃",7.5,"Epic",350000,170,80,255,"Glass",1.35,90,40,140,"rbxassetid://99369701283844"},
+	[9]={"熔岩哑铃",10,"Epic",1200000,255,100,30,"CrackedLava",1.4,60,40,40,"rbxassetid://108797683466319"},
+	[10]={"钻石哑铃",14,"Epic",5000000,120,240,255,"Neon",1.5,230,250,255,"rbxassetid://104387525439155"}
+}
+
+ConfigInstance.awlevelConf={
+	[1]={"青草公园","Grass",0,"Grass",100,175,70,"Offer","材质木箱",0,{"Sand","Wood","Grass"}},
+	[2]={"岩石峡谷","Stone",60,"Slate",120,125,140,"Gacha","岩石石箱",500,{"Wood","Grass","Snow","Rock"}},
+	[3]={"炙热沙漠","Desert",800,"Sand",225,200,140,"Gacha","沙漠宝箱",5000,{"Snow","Rock","Metal","Water"}},
+	[4]={"冰雪山地","Snow",15000,"Snow",235,242,250,"Gacha","冰晶宝箱",50000,{"Metal","Water","Brick","Magma"}},
+	[5]={"熔岩火山","Lava",250000,"Basalt",55,45,45,"Gacha","熔岩宝箱",2000000,{"Brick","Magma","Neon","Diamond"}}
+}
+
+ConfigInstance.awmaterialConf={
+	["Sand"]={"沙子",1.2,"Common",60,"Sand",226,205,145,40,"","rbxassetid://122192010470765"},
+	["Wood"]={"木头",1.5,"Common",48,"Wood",160,110,60,80,"","rbxassetid://128126726660785"},
+	["Grass"]={"草地",2,"Uncommon",30,"Grass",90,170,60,150,"","rbxassetid://126845964848626"},
+	["Snow"]={"冰雪",2.5,"Uncommon",22,"Snow",235,245,255,0,"","rbxassetid://122005236129409"},
+	["Rock"]={"岩石",3.5,"Rare",12,"Slate",110,110,120,0,"","rbxassetid://130795413314674"},
+	["Metal"]={"金属",5,"Rare",8,"DiamondPlate",170,175,185,0,"","rbxassetid://126111622075252"},
+	["Water"]={"流水",7,"Epic",5,"Glass",60,150,255,0,"","rbxassetid://116870538790500"},
+	["Brick"]={"砖块",10,"Epic",3,"Brick",170,70,50,0,"","rbxassetid://1246707076847]=]
+return #v.Value

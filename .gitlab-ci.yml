@@ -1,0 +1,14 @@
+image: python:3.12-slim
+
+stages:
+  - test
+
+framework-regression:
+  stage: test
+  variables:
+    LUAU_VERSION: "0.742"
+    ROJO_VERSION: "7.7.0-rc.1"
+  script:
+    - python scripts/install_ci_tools.py
+    - python scripts/check_framework.py --luau-dir /tmp/luau
+    - /tmp/rojo/rojo build default.project.json -o /tmp/framework.rbxlx

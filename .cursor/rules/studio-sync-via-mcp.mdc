@@ -1,0 +1,38 @@
+---
+description: 本项目不用 Rojo 同步；本地改动须经 Roblox Studio MCP 写入 Studio
+alwaysApply: true
+---
+
+# Studio 同步：不用 Rojo，直接走 MCP
+
+本项目**不使用 Rojo serve/同步**。`default.project.json` 只作为本地 `src/` 与 Studio 实例路径的映射参考。
+
+## 必须
+- 改了 `src/` 下的脚本，**同一轮**用 `user-Roblox_Studio` MCP 把相同改动写进 Studio（优先 `multi_edit`，`datamodel_type: "Edit"`）。本地文件与 Studio 脚本内容保持一致。
+- 新建脚本：用 `multi_edit` 带 `className`（`ModuleScript` / `Script` / `LocalScript`）创建，内容与本地一致。
+- 写完后用 `script_grep` / `script_read` 回读验证（含中文不乱码）。
+- Studio 处于 Play 时先 `start_stop_play` 停止，再在 Edit 下修改。
+- 不确定 Studio 实例时先 `list_roblox_studios`。
+
+## 禁止
+- 让用户"启动 Rojo / 重新 Connect / 等 Rojo 同步"。
+- 只改本地不同步 Studio，或只改 Studio 不改本地。
+- 排查问题时把"Studio 与本地不一致"归因于 Rojo；应直接用 MCP 补写差异。
+
+## 路径映射（本地 → Studio）
+| 本地 | Studio |
+|------|--------|
+| `src/ReplicatedFirst/AllSideCode/...` | `game.ReplicatedFirst.AllSideCode....` |
+| `src/ReplicatedStorage/ClientSideCode/...` | `game.ReplicatedStorage.ClientSideCode....` |
+| `src/ServerScriptService/InitGame/...` | `game.ServerScriptService.InitGame....` |
+| `src/ServerStorage/ServerSideCode/...` | `game.ServerStorage.ServerSideCode....` |
+| `src/StarterPlayer/StarterPlayerScripts/...` | `game.StarterPlayer.StarterPlayerScripts....` |
+
+其余目录按 `default.project.json` 的 `$path` 对应。
+
+- `Foo/init.luau` → 实例 `Foo` 本身（ModuleScript），子文件为其子实例。
+- `X.server.luau` → `Script` 名 `X`；`X.client.luau` → `LocalScript` 名 `X`；`X.luau` → `ModuleScript` 名 `X`。
+
+## 示例
+本地改 `src/ServerStorage/ServerSideCode/System/SystemArmWrestle/init.luau` 后：
+`multi_edit` → `file_path: "game.ServerStorage.ServerSideCode.System.SystemArmWrestle"`，`edits` 用与本地相同的 old/new 片段。

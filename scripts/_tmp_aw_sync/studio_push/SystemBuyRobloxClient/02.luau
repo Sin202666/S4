@@ -1,0 +1,31 @@
+local alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+local lookup = {}
+for i = 1, #alphabet do
+	lookup[string.byte(alphabet, i)] = i - 1
+end
+local function b64decode(data)
+	data = string.gsub(data, "[^A-Za-z0-9+/=]", "")
+	local out = table.create(math.ceil(#data * 3 / 4))
+	local n = 0
+	for i = 1, #data, 4 do
+		local a = lookup[string.byte(data, i)] or 0
+		local b = lookup[string.byte(data, i + 1)] or 0
+		local c = lookup[string.byte(data, i + 2)] or 0
+		local d = lookup[string.byte(data, i + 3)] or 0
+		n += 1
+		out[n] = string.char(bit32.bor(bit32.lshift(a, 2), bit32.rshift(b, 4)))
+		if string.sub(data, i + 2, i + 2) ~= "=" then
+			n += 1
+			out[n] = string.char(bit32.band(bit32.bor(bit32.lshift(b, 4), bit32.rshift(c, 2)), 255))
+		end
+		if string.sub(data, i + 3, i + 3) ~= "=" then
+			n += 1
+			out[n] = string.char(bit32.band(bit32.bor(bit32.lshift(c, 6), d), 255))
+		end
+	end
+	return table.concat(out)
+end
+local src = b64decode("bG9jYWwgbSA9IGdhbWUuUmVwbGljYXRlZFN0b3JhZ2UuQ2xpZW50U2lkZUNvZGUuU3lzdGVtTW9kdWxlLlN5c3RlbUJ1eVJvYmxveAptLlNvdXJjZSAuLj0gWz1bZXIgLSDmlLbnpLznjqnlrrbvvJvpobvlnKjnur/kuJTkuI3og73mmK/oh6rlt7HvvIjmnI3kvqflho3moKHpqozvvIkKCUByZXR1cm4gYm9vbGVhbiAtIOacjeWGmeWFpeaIkOWKn+S4uiB0cnVl77yb5Y+C5pWw5peg5pWI5oiWIEludm9rZSDlpLHotKXkuLogZmFsc2UKXV0KZnVuY3Rpb24gU3lzdGVtQnV5Um9ibG94LlNldEdpZnRUYXJnZXQodGFyZ2V0UGxyOiBQbGF5ZXIpOiBib29sZWFuCglpZiBub3QgdGFyZ2V0UGxyIG9yIG5vdCB0YXJnZXRQbHI6SXNBKCJQbGF5ZXIiKSB0aGVuCgkJcmV0dXJuIGZhbHNlCgllbmQKCWxvY2FsIHJlc3VsdCA9IE5ldFdvcmsuSW52b2tlU2VydmVyKE5ldE1zZy5TRVRfR0lGVCwgdGFyZ2V0UGxyLlVzZXJJZCkKCXJldHVybiByZXN1bHQgPT0gdHJ1ZQplbmQKCi0tW1sKCeaMieWVhuWTgSBvbmx5VGFnIOWPkei1tyBSb2Jsb3gg5LuY6LS56LSt5Lmw77yI5ZCr6LWg6YCB56Gu6K6k5rWB56iL77yJCgoJQHBhcmFtIHBsciBQbGF5ZXIgLSDlj5HotbfotK3kubDnmoTnjqnlrrbvvJvlrqLmiLfnq6/pgJrluLjkuLogTG9jYWxQbGF5ZXIKCUBwYXJhbSBvbmx5VGFnIHN0cmluZyAtIENmZ0ZpbmQg5ZWG5ZOB5ZSv5LiA5qCH562+CglAcmV0dXJuIGJvb2xlYW4gLSDlt7Llj5HotbcgUHJvbXB0IOaIluW8ueWHuui1oOmAgeehruiupOS4uiB0cnVl77yb5Y+C5pWw5oiW6YWN572u5peg5pWI5Li6IGZhbHNlCl1dCmZ1bmN0aW9uIFN5c3RlbUJ1eVJvYmxveC5CdXlSb2Jsb3hCeU9ubHlUYWcocGxyOiBQbGF5ZXIsIG9ubHlUYWc6IHN0cmluZyk6IGJvb2xlYW4KCWlmIG5vdCBwbHIgb3Igbm90IG9ubHlUYWcgdGhlbgoJCXJldHVybiBmYWxzZQoJZW5kCgoJbG9jYWwgY2ZnID0gQ2ZnRmluZC5GaW5kQ2ZnQnlPbmx5VGFnKG9ubHlUYWcpCglpZiBub3QgY2ZnIHRoZW4KCQlyZXR1cm4gZmFsc2UKCWVuZAoKCWxvY2FsIGdpZnRQbGF5ZXI6IE9iamVjdFZhbHVlPyA9IHBscjpGaW5kRmlyc3RDaGlsZChFbnVtTWdyLlBsYXllckluc3QuR2lmdFBsYXllcikgOjogT2JqZWN0VmFsdWU/Cglsb2NhbCBnaWZ0VGFyZ2V0ID0gZ2lmdFBsYXllciBhbmQgZ2lmdFBsYXllci5WYWx1ZQoJaWYgZ2lmdFRhcmdldCBhbmQgZ2lmdFRhcmdldDpJc0EoIlBsYXllciIpIHRoZW4KCQlsb2NhbCBnaWZ0UHJvZHVjdElkID0gY2ZnLkdpZnRJRCBhbmQgdG9udW1iZXIoY2ZnLkdpZnRJRCkKCQlpZiBnaWZ0UHJvZHVjdElkIHRoZW4KCQkJbG9jYWwgY2hlY2tEYXRhID0gewoJCQkJdGl0bGVUZXh0ID0gVHJhbnNsYXRpb25IZWxwZXIuVHJhbnNsYXRlQnlLZXkoIuehruiupCIpLAoJCQkJdGlwc1RleHQgPSBUcmFuc2xhdGlvbkhlbHBlci5UcmFuc2xhdGVCeUtleSgi6LWg6YCB56Gu6K6kIiwgewoJCQkJCXsgY2ZnLlpoTmFtZSB9LAoJCQkJCWdpZnRUYXJnZXQuRGlzcGxheU5hbWUsCgkJCQl9KSwKCQkJCWZ1bmMgPSBmdW5jdGlvbigpCgkJCQkJaWYgTmV0V29yay5JbnZva2VTZXJ2ZXIoTmV0TXNnLlNFVF9HSUZULCBnaWZ0VGFyZ2V0LlVzZXJJZCwgZ2lmdFByb2R1Y3RJZCkgPT0gdHJ1ZSB0aGVuCgkJCQkJCV9wcm9tcHRSb2Jsb3hJdGVtKHBsciwgZ2lmdFByb2R1Y3RJZCA6OiBudW1iZXIpCgkJCQkJZW5kCgkJCQllbmQsCgkJCX0KCQkJTmV0V29yay5GaXJlQmluZGFibGUoTmV0TXNnLlNIT1dfTE9DQUxfVUksICJXYXJuUG9wIiwgY2hlY2tEYXRhLCB0cnVlKQoJCWVuZAoJCXJldHVybiBnaWZ0UHJvZHVjdElkIH49IG5pbAoJZW5kCgoJbG9jYWwgcGFzc0lEID0gdG9udW1iZXIoY2ZnLnBhc3NJRCkKCWlmIHBhc3NJRCBhbmQgcGFzc0lEID4gMCBhbmQgY2ZnLnByaWNlIHRoZW4KCQlpZiBjZmcuY29zdCA9PSBFbnVtTWdyLlJvYnV4VHlwZS5HYW1lUGFzcyB0aGVuCgkJCV9wcm9tcHRHYW1lUGFzcyhwbHIsIHBhc3NJRCkKCQkJcmV0dXJuIHRydWUKCQllbHNlaWYgY2ZnLmNvc3QgPT0gRW51bU1nci5Sb2J1eFR5cGUuUm9idXhJdGVtIHRoZW4KCQkJX3Byb21wdFJvYmxveEl0ZW0ocGxyLCBwYXNzSUQpCgkJCXJldHVybiB0cnVlCgkJZW5kCgllbmQKCglyZXR1cm4gZmFsc2UKZW5kCgpyZXR1cm4gU3lzdGVtQnV5Um9ibG94Cl09XQpyZXR1cm4gI20uU291cmNlCg==")
+local fn, err = load(src)
+assert(fn, err)
+return fn()

@@ -1,0 +1,88 @@
+{
+  "name": "S4",
+  "servePlaceIds": [
+    134905711549750
+  ],
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedFirst": {
+      "AllSideCode": {
+        "$path": "src/ReplicatedFirst/AllSideCode"
+      }
+    },
+    "ReplicatedStorage": {
+      "ClientSideCode": {
+        "$path": "src/ReplicatedStorage/ClientSideCode"
+      },
+      "ShortVideoFeature": {
+        "$path": "src/ReplicatedStorage/ShortVideoFeature"
+      },
+      "MoonAnimator2Script": {
+        "$path": "src/ReplicatedStorage/MoonAnimator2Script"
+      },
+      "Assets": {
+        "$path": "src/ReplicatedStorage/Assets",
+        "$ignoreUnknownInstances": true
+      },
+      "Msg": {
+        "$className": "Folder",
+        "$ignoreUnknownInstances": true,
+        "RemoteEvent": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "NetWorkRemoteEvent": {
+            "$className": "RemoteEvent"
+          },
+          "NetWorkRemoteEvent_Skill": {
+            "$className": "RemoteEvent"
+          }
+        },
+        "RemoteFunction": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "NetWorkRemoteFunction": {
+            "$className": "RemoteFunction"
+          }
+        },
+        "Event": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "NetWorkEvent": {
+            "$className": "BindableEvent"
+          }
+        },
+        "Function": {
+          "$className": "Folder",
+          "$ignoreUnknownInstances": true,
+          "NetWorkBindableFunction": {
+            "$className": "BindableFunction"
+          }
+        }
+      }
+    },
+    "ServerScriptService": {
+      "InitGame": {
+        "$path": "src/ServerScriptService/InitGame"
+      },
+      "ShortVideoFeature": {
+        "$path": "src/ServerScriptService/ShortVideoFeature"
+      }
+    },
+    "ServerStorage": {
+      "ServerSideCode": {
+        "$path": "src/ServerStorage/ServerSideCode"
+      },
+      "GameAnalytics": {
+        "$path": "src/ServerStorage/GameAnalytics"
+      }
+    },
+    "StarterPlayer": {
+      "StarterCharacterScripts": {
+        "$path": "src/StarterPlayer/StarterCharacterScripts"
+      },
+      "StarterPlayerScripts": {
+        "$path": "src/StarterPlayer/StarterPlayerScripts"
+      }
+    }
+  }
+}

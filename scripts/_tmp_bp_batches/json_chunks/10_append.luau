@@ -1,0 +1,4 @@
+local m = game.ReplicatedStorage.ClientSideCode.SystemModule.SystemArmWrestle.BattlePose
+local Hs = game:GetService("HttpService")
+m.Source ..= Hs:JSONDecode([==[".Parent then\n\t\tBattlePose.Stop()\n\t\treturn\n\tend\n\t_resolveArms(s)\n\n\tlocal p = tableModel:GetAttribute(\"P\")\n\tif typeof(p) ~= \"number\" then\n\t\tp = 0.5\n\tend\n\tlocal seat = tableModel:GetAttribute(SEAT_ATTR)\n\tlocal oppCf = tableModel:GetAttribute(OPP_PIVOT_ATTR)\n\tlocal tiltAxis = Vector3.xAxis\n\tif typeof(seat) == \"CFrame\" and typeof(oppCf) == \"CFrame\" then\n\t\ttiltAxis = _flatUnit(oppCf.Position - seat.Position, Vector3.xAxis)\n\tend\n\tlocal topY = _getTableTopY(tableModel)\n\n\tif s.PlayerRight then\n\t\t_applyRightRef(s.PlayerRight, p)\n\tend\n\tif s.OpponentRight then\n\t\t_applyRightRef(s.OpponentRight, 1 - p)\n\tend\n\n\tif s.PlayerLeft and typeof(seat) == \"CFrame\" then\n\t\tlocal shoulder = (s.PlayerLeft.Torso.CFrame *"]==])
+return { n = #m.Source, i = 10 }

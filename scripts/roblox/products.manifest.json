@@ -1,0 +1,30 @@
+{
+  "Note": "Key 对应 ArmWrestleConfig._GAME_PASSES / _PRODUCTS 的键；Price 必须与配置 Robux 一致（脚本会校验）。Name 在同一体验内须唯一。",
+  "Items": [
+    { "Key": "AutoClicker", "Type": "GamePass", "Price": 99, "Name": "Auto Click", "Description": "Auto-tap while training and wrestling", "ZhName": "自动点击", "ZhDescription": "训练和扳手腕自动点击" },
+    { "Key": "DoubleStrength", "Type": "GamePass", "Price": 149, "Name": "2x Strength", "Description": "Permanently gain double strength", "ZhName": "2 倍力量", "ZhDescription": "永久获得双倍力量" },
+    { "Key": "DoubleCash", "Type": "GamePass", "Price": 129, "Name": "2x Cash", "Description": "Permanently gain double cash", "ZhName": "2 倍金钱", "ZhDescription": "永久获得双倍金钱" },
+    { "Key": "GoldenRoll", "Type": "GamePass", "Price": 199, "Name": "Golden Roll", "Description": "8x luck on material rolls", "ZhName": "黄金抽奖", "ZhDescription": "材质抽奖 8 倍幸运" },
+
+    { "Key": "CashSmall", "Type": "DeveloperProduct", "Price": 25, "Name": "Cash Stack", "Description": "10x current world reward", "ZhName": "一沓现金", "ZhDescription": "当前关卡 10 倍奖励" },
+    { "Key": "CashMedium", "Type": "DeveloperProduct", "Price": 79, "Name": "Cash Crate", "Description": "40x current world reward", "ZhName": "一箱现金", "ZhDescription": "当前关卡 40 倍奖励" },
+    { "Key": "CashLarge", "Type": "DeveloperProduct", "Price": 199, "Name": "Vault", "Description": "150x current world reward", "ZhName": "金库", "ZhDescription": "当前关卡 150 倍奖励" },
+    { "Key": "StrengthSmall", "Type": "DeveloperProduct", "Price": 49, "Name": "Protein", "Description": "Gain 300 training hits of strength", "ZhName": "蛋白粉", "ZhDescription": "立即获得 300 次训练的力量" },
+    { "Key": "StrengthLarge", "Type": "DeveloperProduct", "Price": 149, "Name": "Super Protein", "Description": "Gain 1500 training hits of strength", "ZhName": "超级蛋白粉", "ZhDescription": "立即获得 1500 次训练的力量" },
+
+    { "Key": "StrengthTier1", "Type": "DeveloperProduct", "Price": 19, "Name": "Strength Boost x2", "Description": "Permanent 2x strength multiplier (replaces lower tiers)", "ZhName": "力量倍数 x2", "ZhDescription": "永久力量 x2（替换低档）" },
+    { "Key": "StrengthTier2", "Type": "DeveloperProduct", "Price": 49, "Name": "Strength Boost x4", "Description": "Permanent 4x strength multiplier (replaces lower tiers)", "ZhName": "力量倍数 x4", "ZhDescription": "永久力量 x4（替换低档）" },
+    { "Key": "StrengthTier3", "Type": "DeveloperProduct", "Price": 99, "Name": "Strength Boost x8", "Description": "Permanent 8x strength multiplier (replaces lower tiers)", "ZhName": "力量倍数 x8", "ZhDescription": "永久力量 x8（替换低档）" },
+    { "Key": "StrengthTier4", "Type": "DeveloperProduct", "Price": 199, "Name": "Strength Boost x16", "Description": "Permanent 16x strength multiplier (replaces lower tiers)", "ZhName": "力量倍数 x16", "ZhDescription": "永久力量 x16（替换低档）" },
+    { "Key": "StrengthTier5", "Type": "DeveloperProduct", "Price": 399, "Name": "Strength Boost x32", "Description": "Permanent 32x strength multiplier (replaces lower tiers)", "ZhName": "力量倍数 x32", "ZhDescription": "永久力量 x32（替换低档）" },
+    { "Key": "StrengthTier6", "Type": "DeveloperProduct", "Price": 799, "Name": "Strength Boost x64", "Description": "Permanent 64x strength multiplier (replaces lower tiers)", "ZhName": "力量倍数 x64", "ZhDescription": "永久力量 x64（替换低档）" },
+
+    { "Key": "StrengthPack1", "Type": "DeveloperProduct", "Price": 19, "Name": "Strength Pack 200x", "Description": "Gain 200 training hits of strength", "ZhName": "力量包 200 次", "ZhDescription": "立即获得 200 次训练的力量" },
+    { "Key": "StrengthPack2", "Type": "DeveloperProduct", "Price": 99, "Name": "Strength Pack 2000x", "Description": "Gain 2000 training hits of strength", "ZhName": "力量包 2000 次", "ZhDescription": "立即获得 2000 次训练的力量" },
+    { "Key": "StrengthPack3", "Type": "DeveloperProduct", "Price": 299, "Name": "Strength Pack 20000x", "Description": "Gain 20000 training hits of strength", "ZhName": "力量包 20000 次", "ZhDescription": "立即获得 20000 次训练的力量" },
+
+    { "Key": "StrengthPotion", "Type": "DeveloperProduct", "Price": 49, "Name": "Strength Potion", "Description": "2x training strength (15 min)", "ZhName": "力量药水", "ZhDescription": "训练力量 x2（15 分钟）" },
+    { "Key": "TrainSpeedPotion", "Type": "DeveloperProduct", "Price": 49, "Name": "Training Speed Potion", "Description": "2x training speed (15 min)", "ZhName": "训练速度药水", "ZhDescription": "训练速度 x2（15 分钟）" },
+    { "Key": "CashPotion", "Type": "DeveloperProduct", "Price": 49, "Name": "Cash Potion", "Description": "2x wrestling cash (15 min)", "ZhName": "金币药水", "ZhDescription": "对局金币 x2（15 分钟）" }
+  ]
+}

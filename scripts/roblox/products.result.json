@@ -1,0 +1,195 @@
+{
+    "UniverseId":  9105778485,
+    "UpdatedAt":  "2026-10-15 09:38:54",
+    "Items":  [
+                  {
+                      "Key":  "AutoClicker",
+                      "Type":  "GamePass",
+                      "Name":  "Auto Click",
+                      "Price":  99,
+                      "Id":  2038322520,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "DoubleStrength",
+                      "Type":  "GamePass",
+                      "Name":  "2x Strength",
+                      "Price":  149,
+                      "Id":  2036996538,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "DoubleCash",
+                      "Type":  "GamePass",
+                      "Name":  "2x Cash",
+                      "Price":  129,
+                      "Id":  2040056271,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "GoldenRoll",
+                      "Type":  "GamePass",
+                      "Name":  "Golden Roll",
+                      "Price":  199,
+                      "Id":  2036282515,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "CashSmall",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Cash Stack",
+                      "Price":  25,
+                      "Id":  3718674363,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "CashMedium",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Cash Crate",
+                      "Price":  79,
+                      "Id":  3718674369,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "CashLarge",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Vault",
+                      "Price":  199,
+                      "Id":  3718674377,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthSmall",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Protein",
+                      "Price":  49,
+                      "Id":  3718674386,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthLarge",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Super Protein",
+                      "Price":  149,
+                      "Id":  3718674391,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthTier1",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Boost x2",
+                      "Price":  19,
+                      "Id":  3718674398,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthTier2",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Boost x4",
+                      "Price":  49,
+                      "Id":  3718674403,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthTier3",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Boost x8",
+                      "Price":  99,
+                      "Id":  3718674406,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthTier4",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Boost x16",
+                      "Price":  199,
+                      "Id":  3718674408,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthTier5",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Boost x32",
+                      "Price":  399,
+                      "Id":  3718674416,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthTier6",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Boost x64",
+                      "Price":  799,
+                      "Id":  3718674420,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthPack1",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Pack 200x",
+                      "Price":  19,
+                      "Id":  3718674421,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthPack2",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Pack 2000x",
+                      "Price":  99,
+                      "Id":  3718674424,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthPack3",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Pack 20000x",
+                      "Price":  299,
+                      "Id":  3718674429,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "StrengthPotion",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Strength Potion",
+                      "Price":  49,
+                      "Id":  3718674436,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "TrainSpeedPotion",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Training Speed Potion",
+                      "Price":  49,
+                      "Id":  3718674437,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  },
+                  {
+                      "Key":  "CashPotion",
+                      "Type":  "DeveloperProduct",
+                      "Name":  "Cash Potion",
+                      "Price":  49,
+                      "Id":  3718674438,
+                      "Status":  "created",
+                      "ZhLocalized":  false
+                  }
+              ]
+}

@@ -1,0 +1,62 @@
+---
+description: 本地化同概念用词必须统一（Cash/Power 等），禁止 Money/Coins 等混用
+alwaysApply: true
+---
+
+# 本地化用词统一（Roblox / 本游戏）
+
+写或改 `LocalizationTable.xlsx` 的 **en-us**、以及玩家可见英文文案时：**同一游戏概念全表只用一个英文词**，禁止一处 Money、另一处 Cash。
+
+完整填表流程见 `xlsx-auto-sync` 与 `docs/文本本地化开发规范.md`。本规则只管**用词一致性**。
+
+## 必须
+
+1. 新 Key / 改译前先查下表；表内已有译法以**本表为准**，不要自由发挥同义词。
+2. 改完后用搜表核对：该概念不应再出现「禁止」列里的词（例外列除外）。
+3. 中文 Key 可以是「金钱」「现金」「金币」等不同字，**en-us 仍统一成表内词**。
+
+## 本游戏术语表（en-us）
+
+| 概念 | 统一用 | 禁止混用 | 例外 |
+|------|--------|----------|------|
+| 游戏货币（金钱/现金/金币，背包 Coin） | **Cash** | Money, Coins, Gold | 材质名如 Golden Dumbbell |
+| 力量数值 | **Power** | Strength（作属性名时） | 成语 *Power up* 已含 Power，保持即可 |
+| 罗宝 | **Robux** | R$，写作正文时；价签可用 `R$ {1}` | 价签格式 `R$ {1}` 保留 |
+| 领取奖励 | **Claim** | Collect, Get, Take | Got {1}! 获得瞬时提示可用 |
+| 装备 / 已装备 | **Equip** / **Equipped** | Wear, Wearing | — |
+| 已拥有 | **Owned** | Already have（短标签） | 整句 Tips 可用 You already own… |
+| 购买 | **Buy** | Purchase（短按钮） | Purchase failed 可用 |
+| 商店 | **Shop** | Store, Market | — |
+| 游戏通行证 | **Game Pass** | Gamepass, VIP Pass | 专有商品名除外 |
+| Roblox 会员 | **Premium** | Roblox会员英文直译、Membership | Premium Boost 等 |
+| 兑换码 | **Code** / **Redeem** | CDN/CDK 作玩家文案 | Redeem Code 作标题时 |
+| 传送 | **Teleport** | Warp, Travel | — |
+| 关卡/区域门 | **Zone**（门标题）/ 需求句用 Power | Level/World 混用同一 UI | 关卡配置 ZhName 专有地名不改 |
+| 手臂 | **Arm** | Hand, Fist | — |
+| 材质 | **Material** | Texture, Skin（本玩法） | — |
+| 哑铃 | **Dumbbell** | Weight | — |
+| 药水 | **Potion** | Drink, Buff bottle | — |
+| 训练 | **Train** / **Training** | Workout, Exercise | taps 可指点击次数 |
+| 离线 | **Offline** | AFK（正式 UI） | — |
+| 在线奖励 | **Online Rewards** | Daily online（除非确指签到） | — |
+| 限量 | **Limited** / **Sold Out!** | Exclusive（限量库存场景） | 稀有度「专属」= Exclusive |
+| 稀有度阶 | Common / Uncommon / Rare / Epic / Legendary / Mythic / Exclusive | 自造阶名 | — |
+| 设置开/关 | **On** / **Off** | Enabled / Disabled（本项目设置项） | — |
+| 排行榜 | **Rank** / 榜标题用属性名 | Leaderboard 作短列头 | Billboard 长标题可用 |
+
+## 写法习惯
+
+- 按钮、短标签：短词、Title 或短句（Claim、Buy、TAP FAST!）。
+- Tips：口语、可用缩写 Can't / Don't。
+- 倍率：`x2 Power`、`2x Cash`（同类内前后一致，不要混用 `x2` 与 `2x` 同一商品线——**力量倍数商品统一 `xN Power`，Pass 类可用 `2x Power`**）。
+- 占位符只用 `{1}` `{2}`，勿在 en-us 里写英文逗号 `,` 作列表分隔（表头已禁）。
+
+## 禁止
+
+- 同概念多译并存还不改旧键（发现混用要**改表并导表**，不要只改一处新文案）。
+- 为「更文学」换词导致与 HUD/商店已展示词不一致。
+- 把材质色/专有名词（Golden、Arcane）当成货币 Gold。
+
+## 自检（改译后）
+
+在 `LocalizationTable.xlsx` 的 en-us 列搜：`Money`、`Coins`、`Gamepass`、`Enabled`、`Disabled`（设置文案）、以及本不该出现的 `Strength` 属性译名；误用则改成上表用词。存档字段、商品键（`Strength`、`StrengthTier`、`StrengthPack`、`StrengthPotion`）不是玩家文案，不随显示词改名。

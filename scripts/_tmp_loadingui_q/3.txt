@@ -1,0 +1,109 @@
+	local direct = buttonFrame:FindFirstChild("跳过")
+	if direct and direct:IsA("TextLabel") then
+		return direct
+	end
+	local nested = buttonFrame:FindFirstChild("Frame")
+	local label = nested and nested:FindFirstChild("跳过")
+	if label and label:IsA("TextLabel") then
+		return label
+	end
+	return nil
+end
+
+-- ============================================================================
+-- 公共 API
+-- ============================================================================
+
+--[[
+	启动加载界面全流程（资源完成监听、圆点跳动、跳过、关闭动画）
+	@param config StartConfig - 界面实例、计数器与完成回调
+	@return nil - 无返回值
+]]
+function LoadingUI.Start(config: StartConfig)
+	local preloadGui = config.preloadGui
+	local canvasGroup = preloadGui.CanvasGroup :: CanvasGroup
+	local preloadFrame = canvasGroup.Frame :: Frame
+	local buttonFrame = preloadFrame["跳过按钮"] :: Frame
+	local blackBg = preloadGui["半透明屏蔽层"] :: ImageButton
+	local localPlayer = Players.LocalPlayer :: Player
+
+	local progressFrame = preloadFrame:FindFirstChild("进度条")
+	if progressFrame and progressFrame:IsA("GuiObject") then
+		progressFrame.Visible = false
+	end
+
+	local loadingLabel = preloadFrame:FindFirstChild("Loading")
+	if loadingLabel and loadingLabel:IsA("GuiObject") then
+		loadingLabel.Visible = false
+	end
+
+	preloadGui.Name = PRELOAD_GUI_SHOW_NAME
+	buttonFrame.Visible = false
+	canvasGroup.GroupTransparency = 0
+	preloadGui.Enabled = true
+
+	local playerGui = localPlayer:WaitForChild("PlayerGui") :: PlayerGui
+	preloadGui.Parent = playerGui
+
+	_initLogoFrame(preloadFrame)
+
+	if config.teleportCfg then
+		_applyTeleportSkin(canvasGroup, config.teleportCfg)
+	end
+
+	local skipLabel = _findSkipLabel(buttonFrame)
+	task.defer(function()
+		if skipLabel then
+			TranslationHelper.SetText(skipLabel, "跳过")
+		end
+	end)
+
+	local loadEndRef = { false }
+	task.spawn(function()
+		_runGuiIsolationLoop(localPlayer, loadEndRef)
+	end)
+
+	local progressConn: RBXScriptConnection? = nil
+	local skipShowConn: RBXScriptConnection? = nil
+	local skipInputConn: RBXScriptConnection? = nil
+	local iconLoopTweens: { Tween } = {}
+	local bgScrollTween = _playBgScroll(canvasGroup)
+	local skipShown = false
+
+	--[[
+		预加载满 5 秒后显示纯文字跳过
+		@return nil - 无返回值
+	]]
+	local function _onSkipThresholdReached()
+		if skipShown or not preloadGui.Parent then
+			return
+		end
+		skipShown = true
+
+		if skipShowConn then
+			skipShowConn:Disconnect()
+			skipShowConn = nil
+		end
+
+		buttonFrame.Visible = true
+		if skipLabel then
+			skipLabel.TextTransparency = 1
+			local stroke = skipLabel:FindFirstChildOfClass("UIStroke")
+			local strokeTween: Tween? = nil
+			if stroke then
+				stroke.Transparency = 1
+				strokeTween = TweenService:Create(stroke, TweenInfo.new(CLOSE_FADE_SEC), { Transparency = 0 })
+			end
+			local textTween = TweenService:Create(
+				skipLabel,
+				TweenInfo.new(CLOSE_FADE_SEC, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+				{ TextTransparency = 0 }
+			)
+			textTween:Play()
+			if strokeTween then
+				strokeTween:Play()
+			end
+		end
+	end
+
+	--[[

@@ -1,0 +1,44 @@
+# -*- coding: utf-8 -*-
+"""Add Remark column to AWConst.xlsx (UTF-8 via openpyxl)."""
+from pathlib import Path
+
+from openpyxl import Workbook
+
+OUT = Path(__file__).resolve().parents[1] / "config" / "AWConst.xlsx"
+
+ROWS = [
+	("EXIT_PUSH_STUDS", 3, "出场时沿 EXIT 朝向外推的距离（studs）"),
+	("WIN_CINEMATIC_SEC", 4.6, "获胜演出总时长（秒）；服务端交还控制须大于它"),
+	("WIN_RELEASE_DELAY_SEC", 5.2, "获胜后服务端交还控制/出场延迟（秒）"),
+	("LOSE_RELEASE_DELAY_SEC", 2.6, "失败后服务端交还控制/出场延迟（秒）"),
+	("LIMITED_ARM_ID", 12, "限量手臂 Id（审判之臂）"),
+	("LIMITED_SOLD_DEFAULT", 96, "限量臂已售默认值（全服库存展示兜底）"),
+	("NEAR_MACHINE_STUDS", 25, "靠近材质箱的判定距离（studs）"),
+	("TABLE_PROMPT_DISTANCE", 18, "比赛桌扳手腕 E 交互距离（studs）"),
+	("ROLL_ANIM_SEC", 3.2, "材质箱抽取 3D 表演总秒数；冷却与之对齐"),
+	("FRIEND_BOOST_PER", 0.1, "同服每位好友现金加成（+10%）"),
+	("FRIEND_BOOST_MAX", 0.5, "好友现金加成封顶（+50%）"),
+	("PREMIUM_BOOST", 0.25, "Roblox 会员现金加成（+25%）"),
+	("OFFLINE_RATE", 0.1, "离线力量折算：在线挂机效率的 10%"),
+	("OFFLINE_MIN_SEC", 300, "离线最短门槛（秒）；线上 5 分钟，Studio 代码内改为 10 秒"),
+	("OFFLINE_MAX_SEC", 28800, "离线累计封顶（秒，8 小时）"),
+	("MENU_GIFT_CASH_MULT", 10, "菜单挽留礼物：已解锁关最强对手奖励 × 本倍数"),
+	("ZoneLength", 170, "单关世界区 X 向长度（studs）"),
+	("ZoneWidth", 130, "单关世界区 Z 向宽度（studs）"),
+	("BattleTime", 15, "扳手腕对局时长（秒）"),
+	("TapPower", 0.035, "单次点击对进度条贡献"),
+	("OpponentDrift", 0.13, "对手持续回推强度；需持续点击才能压住"),
+	("MaxTapsPerSecond", 14, "玩家点击速率上限（防脚本）"),
+	("AutoTapsPerSecond", 8, "自动点击通行证每秒点击次数"),
+]
+
+wb = Workbook()
+ws = wb.active
+ws.title = "Sheet1"
+ws.append(["键", "数值", "备注"])
+ws.append(["Key", "Value", "Remark"])
+ws.append(["string", "number", "string"])
+for key, value, remark in ROWS:
+	ws.append([key, value, remark])
+wb.save(OUT)
+print("wrote", OUT, "rows", len(ROWS))
